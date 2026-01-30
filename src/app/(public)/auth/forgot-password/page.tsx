@@ -2,88 +2,132 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { Mail, ArrowLeft, CheckCircle } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { Container } from '@/components/layout';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ArrowLeft, Mail } from 'lucide-react';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardFooter,
+  Input,
+  Button,
+} from '@heroui/react';
 
 export default function ForgotPasswordPage() {
   const { t } = useLanguage();
   const [email, setEmail] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock password reset
-    setSubmitted(true);
+    setIsLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setIsLoading(false);
+    setIsSubmitted(true);
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FFF8E6] via-white to-[#FFF8E6] py-12 px-4">
       <Container size="small">
         <div className="mx-auto max-w-md">
-          <Card>
-            <CardHeader className="text-center">
-              <Link href="/" className="mx-auto flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500">
-                  <span className="text-xl font-bold text-white">G</span>
-                </div>
+          <Card className="border border-gray-200 shadow-xl">
+            <CardHeader className="flex flex-col items-center gap-4 pt-8 pb-2">
+              <Link href="/">
+                <Image
+                  src="/logo-icon.svg"
+                  alt="GoldMarket"
+                  width={56}
+                  height={56}
+                  className="h-14 w-14"
+                />
               </Link>
-              <CardTitle className="mt-4 text-2xl">{t('auth.forgotPasswordTitle')}</CardTitle>
-              <CardDescription>
-                {t('auth.forgotPasswordDescription')}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              {submitted ? (
+              {isSubmitted ? (
                 <div className="text-center">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
-                    <Mail className="h-6 w-6 text-green-600" />
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
+                    <CheckCircle className="h-8 w-8 text-green-600" />
                   </div>
-                  <h3 className="mt-4 text-lg font-medium">{t('auth.checkEmail')}</h3>
-                  <p className="mt-2 text-sm text-gray-600">
-                    {t('auth.resetLinkSent')}
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    შეამოწმეთ ელ-ფოსტა
+                  </h1>
+                  <p className="mt-2 text-sm text-gray-500">
+                    პაროლის აღდგენის ინსტრუქცია გამოგზავნილია მისამართზე: <strong>{email}</strong>
                   </p>
-                  <Button
-                    variant="outline"
-                    className="mt-6"
-                    onClick={() => setSubmitted(false)}
-                  >
-                    {t('auth.tryAnotherEmail')}
-                  </Button>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">{t('auth.emailLabel')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={t('auth.emailPlaceholder')}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
+                <div className="text-center">
+                  <h1 className="text-2xl font-bold text-gray-900">
+                    {t('auth.forgotPasswordTitle')}
+                  </h1>
+                  <p className="mt-1 text-sm text-gray-500">
+                    შეიყვანეთ ელ-ფოსტა და გამოგიგზავნით აღდგენის ბმულს
+                  </p>
+                </div>
+              )}
+            </CardHeader>
+
+            <CardBody className="px-8 py-6">
+              {isSubmitted ? (
+                <div className="space-y-4">
+                  <Button
+                    as={Link}
+                    href="/auth/login"
+                    className="w-full bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00]"
+                    size="lg"
+                    radius="lg"
+                  >
+                    დაბრუნება ავტორიზაციაზე
+                  </Button>
+                  <p className="text-center text-sm text-gray-500">
+                    ვერ მიიღეთ წერილი?{' '}
+                    <button
+                      type="button"
+                      onClick={() => setIsSubmitted(false)}
+                      className="font-medium text-[#FFB011] hover:text-[#E09D00]"
+                    >
+                      ხელახლა გაგზავნა
+                    </button>
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <Input
+                    type="email"
+                    label={t('auth.emailLabel')}
+                    placeholder={t('auth.emailPlaceholder')}
+                    value={email}
+                    onValueChange={setEmail}
+                    startContent={<Mail className="h-4 w-4 text-gray-400" />}
+                    classNames={{
+                      inputWrapper: 'border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011]',
+                    }}
+                    variant="bordered"
+                    isRequired
+                  />
+
                   <Button
                     type="submit"
-                    className="w-full bg-amber-500 hover:bg-amber-600"
+                    className="w-full bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00]"
+                    size="lg"
+                    radius="lg"
+                    isLoading={isLoading}
                   >
                     {t('auth.sendResetLink')}
                   </Button>
                 </form>
               )}
-            </CardContent>
-            <CardFooter className="justify-center">
+            </CardBody>
+
+            <CardFooter className="justify-center pb-8">
               <Link
                 href="/auth/login"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 <ArrowLeft className="h-4 w-4" />
-                {t('auth.backToLogin')}
+                უკან დაბრუნება
               </Link>
             </CardFooter>
           </Card>

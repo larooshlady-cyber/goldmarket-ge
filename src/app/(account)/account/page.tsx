@@ -1,12 +1,23 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n';
 import { useAuth } from '@/lib/auth';
 import { listings } from '@/lib/mock';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  Button,
+  Chip,
+  Table,
+  TableHeader,
+  TableColumn,
+  TableBody,
+  TableRow,
+  TableCell,
+} from '@heroui/react';
 import {
   ListChecks,
   Wallet,
@@ -14,7 +25,12 @@ import {
   TrendingUp,
   Plus,
   ArrowRight,
+  Zap,
+  ShieldCheck,
+  ChevronRight,
+  Package,
 } from 'lucide-react';
+import { StatusBadge, VipBadge } from '@/components/heroui';
 
 export default function AccountDashboardPage() {
   const { t } = useLanguage();
@@ -24,179 +40,232 @@ export default function AccountDashboardPage() {
   const stats = {
     activeListings: 5,
     totalViews: 1234,
-    walletBalance: 150,
+    walletBalance: user?.balance || 150,
     soldItems: 8,
   };
 
   // Get user's recent listings (mock)
-  const recentListings = listings.slice(0, 4);
+  const recentListings = listings.slice(0, 5);
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('ka-GE').format(price);
+  };
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">{t('account.dashboard')}</h1>
-        <p className="text-gray-600">
-          {t('home.heroSubtitle')}
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">{t('account.dashboard')}</h1>
+        <p className="mt-1 text-gray-500">
+          მოგესალმებით, {user?.name || 'მომხმარებელი'}
         </p>
       </div>
 
-      {/* Stats grid */}
+      {/* Stats Grid */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">
-              <ListChecks className="h-6 w-6 text-blue-600" />
+        <Card className="border border-gray-200 shadow-none">
+          <CardBody className="p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100">
+                <ListChecks className="h-6 w-6 text-blue-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">{t('account.activeListings')}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.activeListings}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-600">{t('account.activeListings')}</p>
-              <p className="text-2xl font-bold">{stats.activeListings}</p>
-            </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
-        <Card>
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100">
-              <Eye className="h-6 w-6 text-green-600" />
+        <Card className="border border-gray-200 shadow-none">
+          <CardBody className="p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-green-100">
+                <Eye className="h-6 w-6 text-green-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">{t('listing.views')}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalViews.toLocaleString()}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-600">{t('listing.views')}</p>
-              <p className="text-2xl font-bold">{stats.totalViews}</p>
-            </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
-        <Card>
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-100">
-              <Wallet className="h-6 w-6 text-amber-600" />
+        <Card className="border border-gray-200 shadow-none bg-[#FFF8E6]">
+          <CardBody className="p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFB011]">
+                <Wallet className="h-6 w-6 text-black" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">{t('account.balance')}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.walletBalance} ₾</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-600">{t('account.balance')}</p>
-              <p className="text-2xl font-bold">{stats.walletBalance} {t('common.currency')}</p>
-            </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
-        <Card>
-          <CardContent className="flex items-center gap-4 p-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100">
-              <TrendingUp className="h-6 w-6 text-purple-600" />
+        <Card className="border border-gray-200 shadow-none">
+          <CardBody className="p-5">
+            <div className="flex items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100">
+                <TrendingUp className="h-6 w-6 text-purple-600" />
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">{t('account.soldListings')}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.soldItems}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-gray-600">{t('account.soldListings')}</p>
-              <p className="text-2xl font-bold">{stats.soldItems}</p>
-            </div>
-          </CardContent>
+          </CardBody>
         </Card>
       </div>
 
-      {/* Quick actions */}
+      {/* Quick Actions */}
       <div className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold">{t('footer.quickLinks')}</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-900">სწრაფი მოქმედებები</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link href="/account/listings/new">
-            <Card className="cursor-pointer transition-shadow hover:shadow-md">
-              <CardContent className="flex items-center gap-4 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500">
-                  <Plus className="h-5 w-5 text-white" />
+            <Card isPressable className="border border-gray-200 shadow-none hover:shadow-md transition-shadow">
+              <CardBody className="flex flex-row items-center gap-4 p-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#FFB011]">
+                  <Plus className="h-6 w-6 text-black" />
                 </div>
-                <span className="font-medium">{t('account.createListing')}</span>
-              </CardContent>
+                <div>
+                  <p className="font-semibold text-gray-900">{t('account.createListing')}</p>
+                  <p className="text-xs text-gray-500">ახალი განცხადება</p>
+                </div>
+              </CardBody>
             </Card>
           </Link>
 
           <Link href="/account/wallet">
-            <Card className="cursor-pointer transition-shadow hover:shadow-md">
-              <CardContent className="flex items-center gap-4 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500">
-                  <Wallet className="h-5 w-5 text-white" />
+            <Card isPressable className="border border-gray-200 shadow-none hover:shadow-md transition-shadow">
+              <CardBody className="flex flex-row items-center gap-4 p-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#0D6B5F]">
+                  <Wallet className="h-6 w-6 text-white" />
                 </div>
-                <span className="font-medium">{t('account.topUp')}</span>
-              </CardContent>
+                <div>
+                  <p className="font-semibold text-gray-900">{t('account.topUp')}</p>
+                  <p className="text-xs text-gray-500">ბალანსის შევსება</p>
+                </div>
+              </CardBody>
             </Card>
           </Link>
 
           <Link href="/account/services">
-            <Card className="cursor-pointer transition-shadow hover:shadow-md">
-              <CardContent className="flex items-center gap-4 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-500">
-                  <TrendingUp className="h-5 w-5 text-white" />
+            <Card isPressable className="border border-gray-200 shadow-none hover:shadow-md transition-shadow">
+              <CardBody className="flex flex-row items-center gap-4 p-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500">
+                  <Zap className="h-6 w-6 text-white" />
                 </div>
-                <span className="font-medium">{t('listingActions.boost')}</span>
-              </CardContent>
+                <div>
+                  <p className="font-semibold text-gray-900">{t('listingActions.boost')}</p>
+                  <p className="text-xs text-gray-500">VIP სერვისები</p>
+                </div>
+              </CardBody>
             </Card>
           </Link>
 
           <Link href="/account/verification">
-            <Card className="cursor-pointer transition-shadow hover:shadow-md">
-              <CardContent className="flex items-center gap-4 p-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500">
-                  <Badge className="h-5 w-5 text-white" />
+            <Card isPressable className="border border-gray-200 shadow-none hover:shadow-md transition-shadow">
+              <CardBody className="flex flex-row items-center gap-4 p-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500">
+                  <ShieldCheck className="h-6 w-6 text-white" />
                 </div>
-                <span className="font-medium">{t('account.verification')}</span>
-              </CardContent>
+                <div>
+                  <p className="font-semibold text-gray-900">{t('account.verification')}</p>
+                  <p className="text-xs text-gray-500">ვერიფიკაცია</p>
+                </div>
+              </CardBody>
             </Card>
           </Link>
         </div>
       </div>
 
-      {/* Recent listings */}
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle>{t('account.myListings')}</CardTitle>
-          <Button variant="ghost" asChild>
-            <Link href="/account/listings" className="gap-2">
-              {t('common.viewAll')}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+      {/* Recent Listings Table */}
+      <Card className="border border-gray-200 shadow-none">
+        <CardHeader className="flex justify-between items-center px-6 pt-5 pb-0">
+          <h2 className="text-lg font-semibold text-gray-900">{t('account.myListings')}</h2>
+          <Button
+            as={Link}
+            href="/account/listings"
+            variant="light"
+            className="text-gray-600"
+            endContent={<ChevronRight className="h-4 w-4" />}
+          >
+            {t('common.viewAll')}
           </Button>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b text-left text-sm text-gray-500">
-                  <th className="pb-3 pr-4">{t('common.images')}</th>
-                  <th className="pb-3 pr-4">{t('common.title')}</th>
-                  <th className="pb-3 pr-4">{t('common.price')}</th>
-                  <th className="pb-3 pr-4">{t('common.status')}</th>
-                  <th className="pb-3">{t('listing.views')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentListings.map((listing) => (
-                  <tr key={listing.id} className="border-b last:border-0">
-                    <td className="py-3 pr-4">
-                      <img
-                        src={listing.images[0]}
-                        alt={listing.title}
-                        className="h-12 w-12 rounded-lg object-cover"
-                      />
-                    </td>
-                    <td className="py-3 pr-4">
-                      <Link
-                        href={`/listing/${listing.slug}`}
-                        className="font-medium hover:text-amber-600"
-                      >
-                        {listing.title}
-                      </Link>
-                    </td>
-                    <td className="py-3 pr-4">
-                      {listing.price.toLocaleString()} {t('common.currency')}
-                    </td>
-                    <td className="py-3 pr-4">
-                      <Badge variant="outline" className="bg-green-50 text-green-700">
-                        {t('listingStatus.published')}
-                      </Badge>
-                    </td>
-                    <td className="py-3">{listing.views}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
+        <CardBody className="px-0">
+          <Table
+            aria-label="Recent listings"
+            classNames={{
+              wrapper: 'shadow-none',
+              th: 'bg-gray-50 text-gray-600 font-semibold text-xs uppercase',
+            }}
+            removeWrapper
+          >
+            <TableHeader>
+              <TableColumn>განცხადება</TableColumn>
+              <TableColumn>ფასი</TableColumn>
+              <TableColumn>სტატუსი</TableColumn>
+              <TableColumn>ნახვები</TableColumn>
+              <TableColumn className="text-right">მოქმედება</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {recentListings.map((listing) => (
+                <TableRow key={listing.id} className="hover:bg-gray-50">
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div className="h-12 w-12 overflow-hidden rounded-lg bg-gray-100">
+                        <Image
+                          src={listing.images[0]}
+                          alt={listing.title}
+                          width={48}
+                          height={48}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 line-clamp-1">{listing.title}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          {listing.vipLevel !== 'none' && (
+                            <VipBadge level={listing.vipLevel} size="sm" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <span className="font-semibold text-[#FFB011]">
+                      {formatPrice(listing.price)} ₾
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <StatusBadge status={listing.status} />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-1 text-gray-500">
+                      <Eye className="h-4 w-4" />
+                      {listing.views}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button
+                      as={Link}
+                      href={`/listing/${listing.slug}`}
+                      size="sm"
+                      variant="flat"
+                      className="bg-gray-100"
+                    >
+                      ნახვა
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardBody>
       </Card>
     </div>
   );

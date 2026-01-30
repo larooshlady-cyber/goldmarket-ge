@@ -3,6 +3,7 @@
 import { use } from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Eye,
   Calendar,
@@ -13,19 +14,29 @@ import {
   ShieldAlert,
   Truck,
   Package,
+  Phone,
+  BadgeCheck,
+  Heart,
 } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { Container, Breadcrumbs } from '@/components/layout';
 import { ListingGrid } from '@/components/marketplace';
 import { ImageGallery, AttributeList, SellerCard, CallButton } from '@/components/listing';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from '@/components/ui/separator';
+import {
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Tabs,
+  Tab,
+  Chip,
+  Divider,
+  Avatar,
+} from '@heroui/react';
 import { getListingBySlug, listings } from '@/lib/mock/listings';
 import { getSellerById } from '@/lib/mock/sellers';
 import { getCategoryById } from '@/lib/mock/categories';
+import { VipBadge } from '@/components/heroui';
 
 interface ListingPageProps {
   params: Promise<{ slug: string }>;
@@ -142,151 +153,248 @@ export default function ListingPage({ params }: ListingPageProps) {
   ].filter(Boolean) as { label: string; href?: string }[];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6">
+    <div className="min-h-screen bg-white py-6">
       <Container>
         {/* Breadcrumbs */}
         <Breadcrumbs items={breadcrumbItems} className="mb-6" />
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-8 lg:grid-cols-5">
           {/* Left Column - Image Gallery */}
-          <div>
+          <div className="lg:col-span-3">
             <ImageGallery images={listing.images} title={listing.title} />
           </div>
 
           {/* Right Column - Details */}
-          <div className="space-y-6">
-            {/* Title and Price */}
-            <div>
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <h1 className="text-2xl font-bold text-gray-900 lg:text-3xl">
-                  {listing.title}
-                </h1>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="icon">
-                    <Share2 className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="icon">
-                    <Flag className="h-4 w-4" />
-                  </Button>
+          <div className="lg:col-span-2 space-y-6">
+            {/* Title, VIP Badge, and Price */}
+            <Card className="border border-gray-200 shadow-none">
+              <CardBody className="p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    {listing.vipLevel !== 'none' && (
+                      <VipBadge level={listing.vipLevel} className="mb-3" />
+                    )}
+                    <h1 className="text-xl font-bold text-gray-900 lg:text-2xl">
+                      {listing.title}
+                    </h1>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      isIconOnly
+                      variant="flat"
+                      className="bg-gray-100"
+                      radius="full"
+                      aria-label="Add to wishlist"
+                    >
+                      <Heart className="h-5 w-5" />
+                    </Button>
+                    <Button
+                      isIconOnly
+                      variant="flat"
+                      className="bg-gray-100"
+                      radius="full"
+                      aria-label="Share"
+                    >
+                      <Share2 className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              <p className="mt-4 text-3xl font-bold text-amber-600">
-                {formatPrice(listing.price)} {t('common.currency')}
-              </p>
+                <p className="mt-4 text-3xl font-bold text-[#FFB011]">
+                  {formatPrice(listing.price)} <span className="text-lg font-normal text-gray-500">{t('common.currency')}</span>
+                </p>
 
-              {/* Meta info */}
-              <div className="mt-4 flex flex-wrap gap-4 text-sm text-gray-500">
-                <span className="flex items-center gap-1">
-                  {t('listing.id')}: {listing.id}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Eye className="h-4 w-4" />
-                  {listing.views} {t('listing.views')}
-                </span>
-                <span className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  {formatDate(listing.createdAt)}
-                </span>
-                <span className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  {listing.city}
-                </span>
-              </div>
+                {/* Meta info */}
+                <div className="mt-4 flex flex-wrap gap-3 text-sm text-gray-500">
+                  <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
+                    ID: {listing.id}
+                  </span>
+                  <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
+                    <Eye className="h-4 w-4" />
+                    {listing.views}
+                  </span>
+                  <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
+                    <Calendar className="h-4 w-4" />
+                    {formatDate(listing.createdAt)}
+                  </span>
+                  <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded-lg">
+                    <MapPin className="h-4 w-4" />
+                    {listing.city}
+                  </span>
+                </div>
 
-              {/* Delivery badges */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {(listing.deliveryMethod === 'pickup' ||
-                  listing.deliveryMethod === 'both') && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    <Package className="h-3 w-3" />
-                    {t('filters.deliveryPickup')}
-                  </Badge>
-                )}
-                {(listing.deliveryMethod === 'shipping' ||
-                  listing.deliveryMethod === 'both') && (
-                  <Badge variant="secondary" className="flex items-center gap-1">
-                    <Truck className="h-3 w-3" />
-                    {t('filters.deliveryShipping')}
-                  </Badge>
-                )}
-              </div>
-            </div>
+                {/* Delivery badges */}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {(listing.deliveryMethod === 'pickup' ||
+                    listing.deliveryMethod === 'both') && (
+                    <Chip
+                      startContent={<Package className="h-3 w-3" />}
+                      variant="flat"
+                      className="bg-gray-100"
+                      size="sm"
+                    >
+                      {t('filters.deliveryPickup')}
+                    </Chip>
+                  )}
+                  {(listing.deliveryMethod === 'shipping' ||
+                    listing.deliveryMethod === 'both') && (
+                    <Chip
+                      startContent={<Truck className="h-3 w-3" />}
+                      variant="flat"
+                      className="bg-gray-100"
+                      size="sm"
+                    >
+                      {t('filters.deliveryShipping')}
+                    </Chip>
+                  )}
+                </div>
+              </CardBody>
+            </Card>
 
             {/* Specifications */}
-            <div>
-              <h2 className="mb-3 font-semibold text-gray-900">
-                {t('listing.specifications')}
-              </h2>
-              <AttributeList attributes={attributes} />
-            </div>
+            <Card className="border border-gray-200 shadow-none">
+              <CardHeader className="px-6 pt-5 pb-0">
+                <h2 className="font-semibold text-gray-900">
+                  {t('listing.specifications')}
+                </h2>
+              </CardHeader>
+              <CardBody className="p-6 pt-4">
+                <AttributeList attributes={attributes} />
+              </CardBody>
+            </Card>
 
             {/* Seller Card */}
             {seller && (
-              <div>
-                <h2 className="mb-3 font-semibold text-gray-900">
-                  {t('common.seller')}
-                </h2>
-                <SellerCard seller={seller} />
-                <div className="mt-4">
-                  <CallButton phone={seller.phone} size="lg" className="w-full" />
-                </div>
-              </div>
+              <Card className="border border-gray-200 shadow-none">
+                <CardHeader className="px-6 pt-5 pb-0">
+                  <h2 className="font-semibold text-gray-900">
+                    {t('common.seller')}
+                  </h2>
+                </CardHeader>
+                <CardBody className="p-6 pt-4">
+                  <div className="flex items-center gap-4">
+                    <Avatar
+                      src={seller.avatar}
+                      name={seller.name.charAt(0)}
+                      size="lg"
+                      classNames={{
+                        base: 'bg-[#FFB011]',
+                        name: 'text-black font-semibold text-lg',
+                      }}
+                    />
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-gray-900">{seller.name}</h3>
+                        {seller.verificationStatus === 'verified' && (
+                          <BadgeCheck className="h-5 w-5 text-[#0D6B5F]" />
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-500">{seller.city}</p>
+                      <div className="mt-1 flex items-center gap-3 text-xs text-gray-500">
+                        <span>{seller.totalListings} განცხადება</span>
+                        <span>რეგისტრაცია: {new Date(seller.memberSince).getFullYear()}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <Divider className="my-4" />
+                  
+                  <Button
+                    as="a"
+                    href={`tel:${seller.phone}`}
+                    className="w-full bg-[#0D6B5F] text-white font-semibold hover:bg-[#0A5A50]"
+                    size="lg"
+                    radius="lg"
+                    startContent={<Phone className="h-5 w-5" />}
+                  >
+                    {seller.phone}
+                  </Button>
+                  
+                  <Button
+                    as={Link}
+                    href={`/seller/${seller.id}`}
+                    variant="bordered"
+                    className="w-full mt-3 border-gray-300"
+                    radius="lg"
+                  >
+                    პროფილის ნახვა
+                  </Button>
+                </CardBody>
+              </Card>
             )}
+
+            {/* Report */}
+            <Button
+              variant="light"
+              className="w-full text-gray-500"
+              startContent={<Flag className="h-4 w-4" />}
+            >
+              განცხადების გასაჩივრება
+            </Button>
           </div>
         </div>
 
         {/* Tabs Section */}
-        <div className="mt-8">
-          <Tabs defaultValue="description">
-            <TabsList>
-              <TabsTrigger value="description">{t('common.description')}</TabsTrigger>
-              <TabsTrigger value="safety">{t('listing.safetyTips')}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="description" className="mt-4">
-              <Card>
-                <CardContent className="p-6">
-                  <p className="whitespace-pre-line text-gray-700">
+        <div className="mt-10">
+          <Tabs
+            aria-label="Listing details"
+            variant="underlined"
+            classNames={{
+              tabList: 'gap-6 border-b border-gray-200',
+              cursor: 'bg-[#FFB011]',
+              tab: 'px-0 h-12',
+              tabContent: 'group-data-[selected=true]:text-[#FFB011]',
+            }}
+          >
+            <Tab key="description" title={t('common.description')}>
+              <Card className="mt-6 border border-gray-200 shadow-none">
+                <CardBody className="p-6">
+                  <p className="whitespace-pre-line text-gray-700 leading-relaxed">
                     {listing.description}
                   </p>
-                </CardContent>
+                </CardBody>
               </Card>
-            </TabsContent>
-            <TabsContent value="safety" className="mt-4">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-3">
-                    <ShieldAlert className="mt-0.5 h-5 w-5 flex-shrink-0 text-amber-500" />
-                    <ul className="space-y-2">
+            </Tab>
+            <Tab key="safety" title={t('listing.safetyTips')}>
+              <Card className="mt-6 border border-gray-200 shadow-none bg-amber-50">
+                <CardBody className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FFB011]">
+                      <ShieldAlert className="h-5 w-5 text-black" />
+                    </div>
+                    <ul className="space-y-3 flex-1">
                       {safetyTips.map((tip, index) => (
                         <li
                           key={index}
-                          className="flex items-center gap-2 text-gray-700"
+                          className="flex items-center gap-3 text-gray-700"
                         >
-                          <ChevronRight className="h-4 w-4 text-gray-400" />
+                          <ChevronRight className="h-4 w-4 text-[#FFB011]" />
                           {tip}
                         </li>
                       ))}
                     </ul>
                   </div>
-                </CardContent>
+                </CardBody>
               </Card>
-            </TabsContent>
+            </Tab>
           </Tabs>
         </div>
 
         {/* Similar Listings */}
         {similarListings.length > 0 && (
-          <section className="mt-12">
+          <section className="mt-12 pt-8 border-t border-gray-200">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900">
                 {t('listing.similarListings')}
               </h2>
-              <Button variant="ghost" size="sm" asChild>
-                <Link href={`/marketplace?category=${category?.slug}`}>
-                  {t('common.viewAll')}
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
+              <Button
+                as={Link}
+                href={`/marketplace?category=${category?.slug}`}
+                variant="light"
+                className="font-medium text-gray-600"
+                endContent={<ChevronRight className="h-4 w-4" />}
+              >
+                {t('common.viewAll')}
               </Button>
             </div>
             <ListingGrid listings={similarListings} />

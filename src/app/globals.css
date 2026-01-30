@@ -5,7 +5,8 @@
 
 /* ============================================
    GoldMarket.ge Design System
-   Based on provided design mockups
+   Based on official logo and design mockups
+   Primary Gold: #FFB011 (from logo)
    ============================================ */
 
 @theme inline {
@@ -14,12 +15,13 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   
-  /* Brand Colors */
+  /* Brand Colors - Updated with logo gold */
   --color-brand: #0D6B5F;
   --color-brand-light: #0A8A7A;
   --color-brand-dark: #0A5A50;
-  --color-gold: #E8B44B;
-  --color-gold-dark: #D97706;
+  --color-gold: #FFB011;
+  --color-gold-dark: #E09D00;
+  --color-gold-light: #FFCC4D;
   
   /* shadcn variables */
   --color-sidebar-ring: var(--sidebar-ring);
@@ -62,17 +64,18 @@
 
 :root {
   /* Base radius */
-  --radius: 0.5rem;
+  --radius: 0.625rem;
   
-  /* GoldMarket Brand Colors */
+  /* GoldMarket Brand Colors - Logo Gold */
+  --gold: #FFB011;
+  --gold-dark: #E09D00;
+  --gold-light: #FFCC4D;
   --brand: #0D6B5F;
   --brand-light: #0A8A7A;
   --brand-dark: #0A5A50;
-  --gold: #E8B44B;
-  --gold-dark: #D97706;
   
   /* Page backgrounds */
-  --background: #F5F5F5;
+  --background: #FFFFFF;
   --foreground: #1A1A1A;
   
   /* Cards & surfaces */
@@ -81,21 +84,21 @@
   --popover: #FFFFFF;
   --popover-foreground: #1A1A1A;
   
-  /* Primary - Brand Teal */
-  --primary: #0D6B5F;
-  --primary-foreground: #FFFFFF;
+  /* Primary - Logo Gold */
+  --primary: #FFB011;
+  --primary-foreground: #1A1A1A;
   
-  /* Secondary - Gold */
-  --secondary: #E8B44B;
+  /* Secondary - Brand Teal */
+  --secondary: #0D6B5F;
   --secondary-foreground: #FFFFFF;
   
   /* Muted */
-  --muted: #F3F4F6;
+  --muted: #F5F5F5;
   --muted-foreground: #6B7280;
   
   /* Accent */
-  --accent: #ECFDF8;
-  --accent-foreground: #0D6B5F;
+  --accent: #FFF8E6;
+  --accent-foreground: #1A1A1A;
   
   /* Destructive/Error */
   --destructive: #DC2626;
@@ -104,11 +107,11 @@
   /* Borders & inputs */
   --border: #E5E7EB;
   --input: #E5E7EB;
-  --ring: #0D6B5F;
+  --ring: #FFB011;
   
   /* Charts */
-  --chart-1: #0D6B5F;
-  --chart-2: #E8B44B;
+  --chart-1: #FFB011;
+  --chart-2: #0D6B5F;
   --chart-3: #6B7280;
   --chart-4: #DC2626;
   --chart-5: #16A34A;
@@ -116,12 +119,12 @@
   /* Sidebar */
   --sidebar: #FFFFFF;
   --sidebar-foreground: #1A1A1A;
-  --sidebar-primary: #0D6B5F;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #ECFDF8;
-  --sidebar-accent-foreground: #0D6B5F;
+  --sidebar-primary: #FFB011;
+  --sidebar-primary-foreground: #1A1A1A;
+  --sidebar-accent: #FFF8E6;
+  --sidebar-accent-foreground: #1A1A1A;
   --sidebar-border: #E5E7EB;
-  --sidebar-ring: #0D6B5F;
+  --sidebar-ring: #FFB011;
   
   /* VIP Badge Colors */
   --vip-super: #DC2626;
@@ -129,7 +132,7 @@
   --vip: #6B7280;
 }
 
-/* Dark mode (optional - keeping for future) */
+/* Dark mode (optional) */
 .dark {
   --background: #111827;
   --foreground: #F9FAFB;
@@ -137,18 +140,18 @@
   --card-foreground: #F9FAFB;
   --popover: #1F2937;
   --popover-foreground: #F9FAFB;
-  --primary: #10B981;
-  --primary-foreground: #FFFFFF;
-  --secondary: #FBBF24;
-  --secondary-foreground: #1A1A1A;
+  --primary: #FFB011;
+  --primary-foreground: #1A1A1A;
+  --secondary: #10B981;
+  --secondary-foreground: #FFFFFF;
   --muted: #374151;
   --muted-foreground: #9CA3AF;
-  --accent: #1F2937;
-  --accent-foreground: #10B981;
+  --accent: #3D2800;
+  --accent-foreground: #FFB011;
   --destructive: #EF4444;
   --border: #374151;
   --input: #374151;
-  --ring: #10B981;
+  --ring: #FFB011;
 }
 
 /* ============================================
@@ -176,80 +179,150 @@ body {
    GoldMarket Custom Component Classes
    ============================================ */
 
-/* Brand button - Teal */
-.btn-brand {
-  background-color: var(--brand);
-  color: white;
-  transition: background-color 0.2s;
-}
-.btn-brand:hover {
-  background-color: var(--brand-dark);
-}
-
-/* Gold button */
-.btn-gold {
+/* Primary button - Gold */
+.btn-primary {
   background-color: var(--gold);
-  color: white;
-  transition: background-color 0.2s;
+  color: #1A1A1A;
+  font-weight: 600;
+  transition: all 0.2s;
 }
-.btn-gold:hover {
+.btn-primary:hover {
   background-color: var(--gold-dark);
 }
 
-/* Header styles */
-.header-brand {
+/* Secondary button - Teal */
+.btn-secondary {
   background-color: var(--brand);
+  color: white;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.btn-secondary:hover {
+  background-color: var(--brand-dark);
+}
+
+/* Outline button */
+.btn-outline {
+  background-color: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-outline:hover {
+  background-color: var(--muted);
+}
+
+/* Ghost button */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--foreground);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.btn-ghost:hover {
+  background-color: var(--muted);
 }
 
 /* VIP Badges */
 .badge-svip {
   background-color: var(--vip-super);
   color: white;
+  font-weight: 600;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 .badge-vip-plus {
   background-color: var(--vip-plus);
   color: white;
+  font-weight: 600;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 .badge-vip {
   background-color: var(--vip);
   color: white;
-}
-
-/* Price badge */
-.price-badge {
-  background-color: var(--gold);
-  color: white;
   font-weight: 600;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.375rem;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
-/* Category card active state */
-.category-card-active {
-  background-color: var(--brand);
-  color: white;
+/* Price display */
+.price-tag {
+  color: var(--gold);
+  font-weight: 700;
 }
 
-/* Form focus ring */
-.focus-brand:focus {
-  outline: none;
-  ring: 2px;
-  ring-color: var(--brand);
-  ring-offset: 2px;
+/* Category strip */
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+}
+.category-item:hover {
+  background-color: var(--muted);
+}
+.category-item.active {
+  background-color: var(--gold);
+  color: #1A1A1A;
+}
+.category-item.active .category-icon {
+  color: #1A1A1A;
 }
 
-/* Card hover effect */
-.card-hover {
-  transition: box-shadow 0.2s, transform 0.2s;
+/* Card styles */
+.listing-card {
+  background: var(--card);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
 }
-.card-hover:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.listing-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
+}
+
+/* Form inputs */
+.input-field {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--card);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+.input-field:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255, 176, 17, 0.15);
+}
+.input-field::placeholder {
+  color: var(--muted-foreground);
 }
 
 /* Modal overlay */
 .modal-overlay {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
 }
 
 /* Scrollbar styling */
@@ -266,7 +339,7 @@ body {
   border-radius: 3px;
 }
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: var(--brand);
+  background: var(--gold);
 }
 
 /* Hide scrollbar but keep functionality */
@@ -282,14 +355,6 @@ body {
    Utility Classes
    ============================================ */
 
-/* Text gradient for special headings */
-.text-gradient-brand {
-  background: linear-gradient(135deg, var(--brand) 0%, var(--brand-light) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* Gold text */
 .text-gold {
   color: var(--gold);
@@ -300,12 +365,97 @@ body {
   color: var(--brand);
 }
 
+/* Gold background */
+.bg-gold {
+  background-color: var(--gold);
+}
+
 /* Brand background */
 .bg-brand {
   background-color: var(--brand);
 }
 
-/* Gold background */
-.bg-gold {
-  background-color: var(--gold);
+/* Filter section */
+.filter-section {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+.filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* Status badges */
+.status-published {
+  background-color: #DCFCE7;
+  color: #166534;
+}
+.status-draft {
+  background-color: #F3F4F6;
+  color: #374151;
+}
+.status-paused {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+.status-sold {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+.status-archived {
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+
+/* Verification badge */
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--brand);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.data-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--border);
+  background: var(--muted);
+}
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.875rem;
+}
+.data-table tr:hover {
+  background: var(--muted);
+}
+
+/* Skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--muted) 0%, #E5E7EB 50%, var(--muted) 100%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.375rem;
 }

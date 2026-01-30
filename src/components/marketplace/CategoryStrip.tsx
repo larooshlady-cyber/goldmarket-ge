@@ -6,8 +6,7 @@ import { ChevronLeft, ChevronRight, LucideIcon } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { Category } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Button, ScrollShadow } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface CategoryStripProps {
@@ -45,24 +44,30 @@ export function CategoryStrip({
     <div className={cn('relative', className)}>
       {/* Scroll buttons - hidden on mobile */}
       <Button
-        variant="outline"
-        size="icon"
-        className="absolute -left-4 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 rounded-full shadow-md lg:flex"
-        onClick={() => scroll('left')}
+        isIconOnly
+        variant="flat"
+        className="absolute -left-4 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 rounded-full bg-white shadow-md border border-gray-200 lg:flex"
+        onPress={() => scroll('left')}
+        aria-label="Scroll left"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
       <Button
-        variant="outline"
-        size="icon"
-        className="absolute -right-4 top-1/2 z-10 hidden h-8 w-8 -translate-y-1/2 rounded-full shadow-md lg:flex"
-        onClick={() => scroll('right')}
+        isIconOnly
+        variant="flat"
+        className="absolute -right-4 top-1/2 z-10 hidden h-9 w-9 -translate-y-1/2 rounded-full bg-white shadow-md border border-gray-200 lg:flex"
+        onPress={() => scroll('right')}
+        aria-label="Scroll right"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>
 
-      <ScrollArea className="w-full whitespace-nowrap" ref={scrollRef}>
-        <div className="flex gap-3 pb-3">
+      <ScrollShadow
+        orientation="horizontal"
+        className="w-full"
+        ref={scrollRef}
+      >
+        <div className="flex gap-2 pb-2">
           {categories.map((category) => {
             const Icon = getIcon(category.icon);
             const isActive = activeCategory === category.id;
@@ -76,14 +81,14 @@ export function CategoryStrip({
                     : `/marketplace?category=${category.slug}`
                 }
                 className={cn(
-                  'flex flex-col items-center gap-2 rounded-xl border px-4 py-3 transition-all hover:border-amber-500 hover:shadow-sm',
+                  'flex flex-col items-center gap-2 rounded-2xl border-2 px-5 py-3 transition-all min-w-[90px]',
                   isActive
-                    ? 'border-amber-500 bg-amber-50 shadow-sm'
-                    : 'border-gray-200 bg-white'
+                    ? 'border-[#FFB011] bg-[#FFF8E6] shadow-sm'
+                    : 'border-transparent bg-gray-50 hover:bg-gray-100 hover:border-gray-200'
                 )}
               >
                 {showImages && category.image ? (
-                  <div className="h-12 w-12 overflow-hidden rounded-lg bg-gray-100">
+                  <div className="h-11 w-11 overflow-hidden rounded-xl bg-gray-100">
                     <img
                       src={category.image}
                       alt={t(category.nameKey)}
@@ -93,8 +98,10 @@ export function CategoryStrip({
                 ) : (
                   <div
                     className={cn(
-                      'flex h-10 w-10 items-center justify-center rounded-lg',
-                      isActive ? 'bg-amber-500 text-white' : 'bg-gray-100 text-gray-600'
+                      'flex h-11 w-11 items-center justify-center rounded-xl transition-colors',
+                      isActive 
+                        ? 'bg-[#FFB011] text-black' 
+                        : 'bg-white text-gray-600 shadow-sm'
                     )}
                   >
                     <Icon className="h-5 w-5" />
@@ -102,8 +109,8 @@ export function CategoryStrip({
                 )}
                 <span
                   className={cn(
-                    'text-xs font-medium',
-                    isActive ? 'text-amber-600' : 'text-gray-700'
+                    'text-xs font-medium whitespace-nowrap',
+                    isActive ? 'text-[#FFB011]' : 'text-gray-700'
                   )}
                 >
                   {t(category.nameKey)}
@@ -112,8 +119,7 @@ export function CategoryStrip({
             );
           })}
         </div>
-        <ScrollBar orientation="horizontal" className="invisible" />
-      </ScrollArea>
+      </ScrollShadow>
     </div>
   );
 }
