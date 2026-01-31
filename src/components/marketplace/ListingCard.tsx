@@ -73,12 +73,12 @@ export function ListingCard({ listing, className }: ListingCardProps) {
           {/* VIP Badge */}
           {vip && (
             <Chip
-              startContent={<vip.icon className="h-3 w-3" />}
+              startContent={<vip.icon className="h-3.5 w-3.5" />}
               className={cn(
-                'absolute left-2 top-2 font-semibold text-[10px] uppercase tracking-wide',
+                'absolute left-2 top-2 font-semibold text-[11px] uppercase tracking-wide px-3 py-1.5 h-auto',
                 vip.badgeClass
               )}
-              size="sm"
+              radius="md"
             >
               {vip.label}
             </Chip>
@@ -90,7 +90,7 @@ export function ListingCard({ listing, className }: ListingCardProps) {
               e.preventDefault();
               e.stopPropagation();
             }}
-            className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white/90 shadow-sm opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white"
+            className="absolute right-2 top-2 flex h-9 w-9 items-center justify-center rounded-xl bg-white/90 shadow-sm opacity-0 transition-opacity group-hover:opacity-100 hover:bg-white"
             aria-label="Add to wishlist"
           >
             <Heart className="h-4 w-4 text-gray-600" />
@@ -98,21 +98,21 @@ export function ListingCard({ listing, className }: ListingCardProps) {
 
           {/* Verified Seller Badge */}
           {listing.seller?.verificationStatus === 'verified' && (
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-xs font-medium text-[#0D6B5F]">
+            <div className="absolute bottom-2 left-2 flex items-center gap-1 rounded-lg bg-white/90 px-2.5 py-1.5 text-xs font-medium text-[#0D6B5F]">
               <BadgeCheck className="h-3.5 w-3.5" />
               დადასტურებული
             </div>
           )}
 
           {/* Views */}
-          <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1 text-xs text-white">
+          <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-lg bg-black/60 px-2.5 py-1.5 text-xs text-white">
             <Eye className="h-3 w-3" />
             {listing.views}
           </div>
         </div>
 
         {/* Content */}
-        <CardBody className="p-3">
+        <CardBody className="p-4">
           <h3 className="line-clamp-2 text-sm font-medium text-gray-900 group-hover:text-[#FFB011] transition-colors">
             {listing.title}
           </h3>
@@ -136,8 +136,8 @@ export function ListingCard({ listing, className }: ListingCardProps) {
 export function SkeletonCard() {
   return (
     <Card className="w-full border border-gray-200" radius="lg" shadow="none">
-      <Skeleton className="aspect-square rounded-none" />
-      <CardBody className="p-3">
+      <Skeleton className="aspect-square rounded-t-lg" />
+      <CardBody className="p-4">
         <Skeleton className="h-4 w-3/4 rounded-lg" />
         <Skeleton className="mt-2 h-3 w-1/2 rounded-lg" />
         <Skeleton className="mt-3 h-5 w-1/3 rounded-lg" />

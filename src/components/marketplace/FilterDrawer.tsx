@@ -3,14 +3,14 @@
 import { Filter } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { FilterConfig, FilterValues } from '@/lib/types';
-import { Button } from '@/components/ui/button';
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
+  Button,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  useDisclosure,
+} from '@heroui/react';
 import { FilterSidebar } from './FilterSidebar';
 
 interface FilterDrawerProps {
@@ -31,34 +31,53 @@ export function FilterDrawer({
   activeFiltersCount = 0,
 }: FilterDrawerProps) {
   const { t } = useLanguage();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  const handleApply = () => {
+    onApply();
+    onOpenChange();
+  };
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <Filter className="h-4 w-4" />
-          {t('common.filter')}
-          {activeFiltersCount > 0 && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-xs text-white">
-              {activeFiltersCount}
-            </span>
+    <>
+      <Button variant="bordered" onPress={onOpen} className="gap-2">
+        <Filter className="h-4 w-4" />
+        {t('common.filter')}
+        {activeFiltersCount > 0 && (
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-xs text-white">
+            {activeFiltersCount}
+          </span>
+        )}
+      </Button>
+      <Modal 
+        isOpen={isOpen} 
+        onOpenChange={onOpenChange}
+        placement="center"
+        size="md"
+        scrollBehavior="inside"
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {t('common.filter')}
+              </ModalHeader>
+              <ModalBody className="pb-6">
+                <FilterSidebar
+                  config={config}
+                  values={values}
+                  onChange={onChange}
+                  onApply={handleApply}
+                  onReset={() => {
+                    onReset();
+                    onClose();
+                  }}
+                />
+              </ModalBody>
+            </>
           )}
-        </Button>
-      </SheetTrigger>
-      <SheetContent side="left" className="w-80 overflow-y-auto">
-        <SheetHeader>
-          <SheetTitle>{t('common.filter')}</SheetTitle>
-        </SheetHeader>
-        <div className="mt-4">
-          <FilterSidebar
-            config={config}
-            values={values}
-            onChange={onChange}
-            onApply={onApply}
-            onReset={onReset}
-          />
-        </div>
-      </SheetContent>
-    </Sheet>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }

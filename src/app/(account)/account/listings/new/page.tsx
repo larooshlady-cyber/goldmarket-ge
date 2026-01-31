@@ -4,19 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
 import { categories } from '@/lib/mock';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Card, CardBody, CardHeader, Button, Input, Textarea, Select, SelectItem, RadioGroup, Radio } from '@heroui/react';
 import { Upload, X, Save, Send, ImagePlus } from 'lucide-react';
 
 const cities = [
@@ -52,6 +40,18 @@ const stoneTypes = [
   { value: 'sapphire', label: 'საფირონი' },
   { value: 'pearl', label: 'მარგალიტი' },
   { value: 'none', label: 'ქვის გარეშე' },
+];
+
+const currencies = [
+  { value: 'GEL', label: '₾ GEL' },
+  { value: 'USD', label: '$ USD' },
+  { value: 'EUR', label: '€ EUR' },
+];
+
+const deliveryOptions = [
+  { value: 'pickup', labelKey: 'filters.deliveryPickup' },
+  { value: 'shipping', labelKey: 'filters.deliveryShipping' },
+  { value: 'both', labelKey: 'filters.deliveryBoth' },
 ];
 
 export default function CreateListingPage() {
@@ -115,239 +115,204 @@ export default function CreateListingPage() {
         {/* Basics */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('createListing.basics')}</CardTitle>
+            <h3 className="text-lg font-semibold">{t('createListing.basics')}</h3>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">{t('createListing.titleLabel')}</Label>
-              <Input
-                id="title"
-                placeholder={t('createListing.titlePlaceholder')}
-                value={formData.title}
-                onChange={(e) => handleChange('title', e.target.value)}
-              />
-            </div>
+          <CardBody className="space-y-4">
+            <Input
+              label={t('createListing.titleLabel')}
+              placeholder={t('createListing.titlePlaceholder')}
+              value={formData.title}
+              onValueChange={(v) => handleChange('title', v)}
+              variant="bordered"
+            />
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label>{t('createListing.categoryLabel')}</Label>
-                <Select value={formData.category} onValueChange={(v) => handleChange('category', v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('createListing.selectCategory')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.id} value={cat.slug}>
-                        {cat.nameKey}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select
+                label={t('createListing.categoryLabel')}
+                placeholder={t('createListing.selectCategory')}
+                selectedKeys={formData.category ? [formData.category] : []}
+                onSelectionChange={(keys) => handleChange('category', Array.from(keys)[0] as string)}
+                variant="bordered"
+              >
+                {categories.map((cat) => (
+                  <SelectItem key={cat.slug} textValue={cat.nameKey}>
+                    {cat.nameKey}
+                  </SelectItem>
+                ))}
+              </Select>
 
               <div className="space-y-2">
-                <Label htmlFor="price">{t('createListing.priceLabel')}</Label>
+                <label className="text-sm font-medium">{t('createListing.priceLabel')}</label>
                 <div className="flex gap-2">
                   <Input
-                    id="price"
                     type="number"
                     placeholder={t('createListing.pricePlaceholder')}
                     value={formData.price}
-                    onChange={(e) => handleChange('price', e.target.value)}
+                    onValueChange={(v) => handleChange('price', v)}
+                    variant="bordered"
                     className="flex-1"
                   />
-                  <Select value={formData.currency} onValueChange={(v) => handleChange('currency', v)}>
-                    <SelectTrigger className="w-24">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="GEL">₾ GEL</SelectItem>
-                      <SelectItem value="USD">$ USD</SelectItem>
-                      <SelectItem value="EUR">€ EUR</SelectItem>
-                    </SelectContent>
+                  <Select
+                    selectedKeys={[formData.currency]}
+                    onSelectionChange={(keys) => handleChange('currency', Array.from(keys)[0] as string)}
+                    variant="bordered"
+                    className="w-28"
+                  >
+                    {currencies.map((curr) => (
+                      <SelectItem key={curr.value} textValue={curr.label}>
+                        {curr.label}
+                      </SelectItem>
+                    ))}
                   </Select>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="description">{t('createListing.descriptionLabel')}</Label>
-              <Textarea
-                id="description"
-                placeholder={t('createListing.descriptionPlaceholder')}
-                value={formData.description}
-                onChange={(e) => handleChange('description', e.target.value)}
-                rows={4}
-              />
-            </div>
-          </CardContent>
+            <Textarea
+              label={t('createListing.descriptionLabel')}
+              placeholder={t('createListing.descriptionPlaceholder')}
+              value={formData.description}
+              onValueChange={(v) => handleChange('description', v)}
+              variant="bordered"
+              minRows={4}
+            />
+          </CardBody>
         </Card>
 
         {/* Specifications */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('createListing.specifications')}</CardTitle>
+            <h3 className="text-lg font-semibold">{t('createListing.specifications')}</h3>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardBody className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label>{t('filters.metalType')}</Label>
-                <Select value={formData.metalType} onValueChange={(v) => handleChange('metalType', v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('common.all')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {metalTypes.map((metal) => (
-                      <SelectItem key={metal.value} value={metal.value}>
-                        {metal.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select
+                label={t('filters.metalType')}
+                placeholder={t('common.all')}
+                selectedKeys={formData.metalType ? [formData.metalType] : []}
+                onSelectionChange={(keys) => handleChange('metalType', Array.from(keys)[0] as string)}
+                variant="bordered"
+              >
+                {metalTypes.map((metal) => (
+                  <SelectItem key={metal.value} textValue={metal.label}>
+                    {metal.label}
+                  </SelectItem>
+                ))}
+              </Select>
+
+              <Select
+                label={t('filters.purity')}
+                placeholder={t('common.all')}
+                selectedKeys={formData.purity ? [formData.purity] : []}
+                onSelectionChange={(keys) => handleChange('purity', Array.from(keys)[0] as string)}
+                variant="bordered"
+              >
+                {goldPurities.map((purity) => (
+                  <SelectItem key={purity.value} textValue={purity.label}>
+                    {purity.label}
+                  </SelectItem>
+                ))}
+              </Select>
 
               <div className="space-y-2">
-                <Label>{t('filters.purity')}</Label>
-                <Select value={formData.purity} onValueChange={(v) => handleChange('purity', v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('common.all')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {goldPurities.map((purity) => (
-                      <SelectItem key={purity.value} value={purity.value}>
-                        {purity.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="weight">{t('filters.weight')}</Label>
+                <label className="text-sm font-medium">{t('filters.weight')}</label>
                 <div className="flex items-center gap-2">
                   <Input
-                    id="weight"
                     type="number"
                     step="0.01"
                     value={formData.weight}
-                    onChange={(e) => handleChange('weight', e.target.value)}
+                    onValueChange={(v) => handleChange('weight', v)}
+                    variant="bordered"
                   />
                   <span className="text-sm text-gray-500">{t('filters.weightUnit')}</span>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>{t('filters.stoneType')}</Label>
-                <Select value={formData.stoneType} onValueChange={(v) => handleChange('stoneType', v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('common.all')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {stoneTypes.map((stone) => (
-                      <SelectItem key={stone.value} value={stone.value}>
-                        {stone.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select
+                label={t('filters.stoneType')}
+                placeholder={t('common.all')}
+                selectedKeys={formData.stoneType ? [formData.stoneType] : []}
+                onSelectionChange={(keys) => handleChange('stoneType', Array.from(keys)[0] as string)}
+                variant="bordered"
+              >
+                {stoneTypes.map((stone) => (
+                  <SelectItem key={stone.value} textValue={stone.label}>
+                    {stone.label}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
 
             <div className="space-y-2">
-              <Label>{t('filters.condition')}</Label>
+              <label className="text-sm font-medium">{t('filters.condition')}</label>
               <RadioGroup
                 value={formData.condition}
                 onValueChange={(v) => handleChange('condition', v)}
-                className="flex gap-4"
+                orientation="horizontal"
               >
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="new" id="new" />
-                  <Label htmlFor="new" className="font-normal">
-                    {t('filters.conditionNew')}
-                  </Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="used" id="used" />
-                  <Label htmlFor="used" className="font-normal">
-                    {t('filters.conditionUsed')}
-                  </Label>
-                </div>
+                <Radio value="new">{t('filters.conditionNew')}</Radio>
+                <Radio value="used">{t('filters.conditionUsed')}</Radio>
               </RadioGroup>
             </div>
 
             <div className="space-y-2">
-              <Label>{t('filters.certificate')}</Label>
+              <label className="text-sm font-medium">{t('filters.certificate')}</label>
               <RadioGroup
                 value={formData.hasCertificate}
                 onValueChange={(v) => handleChange('hasCertificate', v)}
-                className="flex gap-4"
+                orientation="horizontal"
               >
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="yes" id="cert-yes" />
-                  <Label htmlFor="cert-yes" className="font-normal">
-                    {t('filters.hasCertificate')}
-                  </Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="no" id="cert-no" />
-                  <Label htmlFor="cert-no" className="font-normal">
-                    არა
-                  </Label>
-                </div>
+                <Radio value="yes">{t('filters.hasCertificate')}</Radio>
+                <Radio value="no">არა</Radio>
               </RadioGroup>
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Location and delivery */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('createListing.location')}</CardTitle>
+            <h3 className="text-lg font-semibold">{t('createListing.location')}</h3>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardBody className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label>{t('createListing.cityLabel')}</Label>
-                <Select value={formData.city} onValueChange={(v) => handleChange('city', v)}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('createListing.selectCity')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {cities.map((city) => (
-                      <SelectItem key={city.value} value={city.value}>
-                        {city.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select
+                label={t('createListing.cityLabel')}
+                placeholder={t('createListing.selectCity')}
+                selectedKeys={formData.city ? [formData.city] : []}
+                onSelectionChange={(keys) => handleChange('city', Array.from(keys)[0] as string)}
+                variant="bordered"
+              >
+                {cities.map((city) => (
+                  <SelectItem key={city.value} textValue={city.label}>
+                    {city.label}
+                  </SelectItem>
+                ))}
+              </Select>
 
-              <div className="space-y-2">
-                <Label>{t('createListing.deliveryLabel')}</Label>
-                <Select
-                  value={formData.deliveryMethod}
-                  onValueChange={(v) => handleChange('deliveryMethod', v)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder={t('createListing.selectDelivery')} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pickup">{t('filters.deliveryPickup')}</SelectItem>
-                    <SelectItem value="shipping">{t('filters.deliveryShipping')}</SelectItem>
-                    <SelectItem value="both">{t('filters.deliveryBoth')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Select
+                label={t('createListing.deliveryLabel')}
+                placeholder={t('createListing.selectDelivery')}
+                selectedKeys={[formData.deliveryMethod]}
+                onSelectionChange={(keys) => handleChange('deliveryMethod', Array.from(keys)[0] as string)}
+                variant="bordered"
+              >
+                {deliveryOptions.map((opt) => (
+                  <SelectItem key={opt.value} textValue={t(opt.labelKey)}>
+                    {t(opt.labelKey)}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Photos */}
         <Card>
           <CardHeader>
-            <CardTitle>{t('createListing.media')}</CardTitle>
+            <h3 className="text-lg font-semibold">{t('createListing.media')}</h3>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardBody className="space-y-4">
             <p className="text-sm text-gray-500">{t('createListing.uploadHint')}</p>
 
             <div className="grid grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5">
@@ -382,17 +347,15 @@ export default function CreateListingPage() {
                 </button>
               )}
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Actions */}
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-          <Button variant="outline" onClick={handleSaveDraft} className="gap-2">
-            <Save className="h-4 w-4" />
+          <Button variant="bordered" onPress={handleSaveDraft} startContent={<Save className="h-4 w-4" />}>
             {t('createListing.saveDraft')}
           </Button>
-          <Button onClick={handlePublish} className="gap-2 bg-amber-500 hover:bg-amber-600">
-            <Send className="h-4 w-4" />
+          <Button onPress={handlePublish} className="bg-amber-500 text-white hover:bg-amber-600" startContent={<Send className="h-4 w-4" />}>
             {t('createListing.publish')}
           </Button>
         </div>

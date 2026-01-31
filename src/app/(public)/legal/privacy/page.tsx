@@ -2,7 +2,7 @@
 
 import { useLanguage } from '@/lib/i18n';
 import { Container, Breadcrumbs } from '@/components/layout';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardBody } from '@heroui/react';
 
 export default function PrivacyPage() {
   const { t } = useLanguage();
@@ -19,7 +19,7 @@ export default function PrivacyPage() {
         />
 
         <Card>
-          <CardContent className="prose prose-gray max-w-none p-6">
+          <CardBody className="prose prose-gray max-w-none p-6">
             <h1 className="text-2xl font-bold text-gray-900">{t('nav.privacy')}</h1>
             <p className="text-sm text-gray-500">ბოლო განახლება: იანვარი 2025</p>
 
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
               კონფიდენციალურობასთან დაკავშირებული კითხვებისთვის: 
               privacy@goldmarket.ge
             </p>
-          </CardContent>
+          </CardBody>
         </Card>
       </Container>
     </div>

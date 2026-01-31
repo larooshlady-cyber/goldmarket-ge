@@ -1,7 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/lib/i18n';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 
 export function LanguageToggle() {
   const { language, setLanguage } = useLanguage();
@@ -9,18 +9,20 @@ export function LanguageToggle() {
   return (
     <div className="flex items-center gap-1 rounded-lg border border-gray-200 p-0.5">
       <Button
-        variant={language === 'ka' ? 'default' : 'ghost'}
+        variant={language === 'ka' ? 'solid' : 'light'}
+        color={language === 'ka' ? 'primary' : 'default'}
         size="sm"
-        className="h-7 px-2 text-xs font-medium"
-        onClick={() => setLanguage('ka')}
+        className="h-7 min-w-8 px-2 text-xs font-medium"
+        onPress={() => setLanguage('ka')}
       >
         KA
       </Button>
       <Button
-        variant={language === 'en' ? 'default' : 'ghost'}
+        variant={language === 'en' ? 'solid' : 'light'}
+        color={language === 'en' ? 'primary' : 'default'}
         size="sm"
-        className="h-7 px-2 text-xs font-medium"
-        onClick={() => setLanguage('en')}
+        className="h-7 min-w-8 px-2 text-xs font-medium"
+        onPress={() => setLanguage('en')}
       >
         EN
       </Button>

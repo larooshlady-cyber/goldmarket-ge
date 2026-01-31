@@ -1,59 +1,46 @@
 'use client';
 
-import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
-import { useAuth } from '@/lib/auth';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardBody, CardHeader, Button, Chip, Input, Divider } from '@heroui/react';
 import {
-  ShieldCheck,
+  Shield,
   Upload,
   CheckCircle,
   Clock,
-  XCircle,
+  AlertCircle,
   FileText,
-  Building2,
+  Camera,
 } from 'lucide-react';
+import { useState } from 'react';
+
+type VerificationStatus = 'not_verified' | 'pending' | 'verified';
 
 export default function VerificationPage() {
   const { t } = useLanguage();
-  const { user } = useAuth();
-  const [idUploaded, setIdUploaded] = useState(false);
-  const [businessUploaded, setBusinessUploaded] = useState(false);
-
-  // Mock verification status
-  const verificationStatus: 'not-verified' | 'pending' | 'verified' = user?.verificationStatus === 'verified'
-    ? 'verified'
-    : user?.verificationStatus === 'pending'
-    ? 'pending'
-    : 'not-verified';
+  const [status] = useState<VerificationStatus>('not_verified');
 
   const getStatusInfo = () => {
-    switch (verificationStatus) {
+    switch (status) {
       case 'verified':
         return {
+          color: 'success' as const,
           icon: CheckCircle,
-          color: 'text-green-600',
-          bg: 'bg-green-100',
-          badge: 'bg-green-100 text-green-700',
-          label: t('verification.verified'),
+          title: t('verification.statusVerified'),
+          description: t('verification.verifiedDescription'),
         };
       case 'pending':
         return {
+          color: 'warning' as const,
           icon: Clock,
-          color: 'text-yellow-600',
-          bg: 'bg-yellow-100',
-          badge: 'bg-yellow-100 text-yellow-700',
-          label: t('verification.pending'),
+          title: t('verification.statusPending'),
+          description: t('verification.pendingDescription'),
         };
       default:
         return {
-          icon: XCircle,
-          color: 'text-gray-600',
-          bg: 'bg-gray-100',
-          badge: 'bg-gray-100 text-gray-700',
-          label: t('verification.notVerified'),
+          color: 'danger' as const,
+          icon: AlertCircle,
+          title: t('verification.statusNotVerified'),
+          description: t('verification.notVerifiedDescription'),
         };
     }
   };
@@ -61,134 +48,171 @@ export default function VerificationPage() {
   const statusInfo = getStatusInfo();
   const StatusIcon = statusInfo.icon;
 
-  const benefits = [
-    t('verification.benefit1'),
-    t('verification.benefit2'),
-    t('verification.benefit3'),
-  ];
-
   return (
     <div className="p-4 md:p-6 lg:p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">{t('verification.pageTitle')}</h1>
+        <h1 className="text-2xl font-bold">{t('account.verification')}</h1>
       </div>
 
-      <div className="mx-auto max-w-3xl space-y-6">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Status card */}
-        <Card>
-          <CardContent className="flex flex-col items-center gap-4 p-8 sm:flex-row">
-            <div className={`flex h-20 w-20 shrink-0 items-center justify-center rounded-full ${statusInfo.bg}`}>
-              <StatusIcon className={`h-10 w-10 ${statusInfo.color}`} />
-            </div>
-            <div className="text-center sm:text-left">
-              <p className="mb-1 text-sm text-gray-500">{t('verification.status')}</p>
-              <Badge className={statusInfo.badge}>{statusInfo.label}</Badge>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="lg:col-span-1">
+          <Card>
+            <CardBody className="space-y-4 p-6">
+              <div className="flex items-center gap-4">
+                <div className={`flex h-14 w-14 items-center justify-center rounded-full ${
+                  status === 'verified' ? 'bg-green-100 text-green-600' :
+                  status === 'pending' ? 'bg-amber-100 text-amber-600' :
+                  'bg-red-100 text-red-600'
+                }`}>
+                  <StatusIcon className="h-7 w-7" />
+                </div>
+                <div>
+                  <Chip color={statusInfo.color} variant="flat">
+                    {statusInfo.title}
+                  </Chip>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600">{statusInfo.description}</p>
+            </CardBody>
+          </Card>
 
-        {/* Benefits */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5 text-amber-500" />
-              {t('verification.benefits')}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="space-y-3">
-              {benefits.map((benefit, index) => (
-                <li key={index} className="flex items-center gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-500" />
-                  <span>{benefit}</span>
-                </li>
-              ))}
-            </ul>
-          </CardContent>
-        </Card>
+          {/* Benefits */}
+          <Card className="mt-6">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Shield className="h-5 w-5 text-amber-500" />
+                <h3 className="font-semibold">{t('verification.benefits')}</h3>
+              </div>
+            </CardHeader>
+            <CardBody className="space-y-3">
+              <div className="flex items-start gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                <span className="text-sm">{t('verification.benefit1')}</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                <span className="text-sm">{t('verification.benefit2')}</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                <span className="text-sm">{t('verification.benefit3')}</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <CheckCircle className="mt-0.5 h-4 w-4 text-green-500" />
+                <span className="text-sm">{t('verification.benefit4')}</span>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
 
         {/* Upload documents */}
-        {verificationStatus !== 'verified' && (
+        <div className="lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle>{t('verification.uploadDocuments')}</CardTitle>
-              <CardDescription>
-                ატვირთეთ საჭირო დოკუმენტები ვერიფიკაციისთვის
-              </CardDescription>
+              <h3 className="text-lg font-semibold">{t('verification.uploadDocuments')}</h3>
             </CardHeader>
-            <CardContent className="space-y-4">
-              {/* ID Document */}
-              <div className="rounded-lg border-2 border-dashed p-6">
-                <div className="flex flex-col items-center gap-4 sm:flex-row">
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-blue-100">
-                    <FileText className="h-8 w-8 text-blue-600" />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h4 className="font-medium">{t('verification.idDocument')}</h4>
-                    <p className="text-sm text-gray-500">
-                      პირადობის მოწმობა ან პასპორტი
-                    </p>
-                  </div>
-                  {idUploaded ? (
-                    <Badge className="bg-green-100 text-green-700">
-                      <CheckCircle className="mr-1 h-4 w-4" />
-                      ატვირთულია
-                    </Badge>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      onClick={() => setIdUploaded(true)}
-                      className="gap-2"
-                    >
-                      <Upload className="h-4 w-4" />
-                      ატვირთვა
-                    </Button>
-                  )}
+            <CardBody className="space-y-6">
+              <p className="text-sm text-gray-500">{t('verification.uploadDescription')}</p>
+
+              {/* Personal info */}
+              <div>
+                <h4 className="mb-4 font-medium">{t('verification.personalInfo')}</h4>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Input
+                    label={t('verification.firstName')}
+                    variant="bordered"
+                  />
+                  <Input
+                    label={t('verification.lastName')}
+                    variant="bordered"
+                  />
+                  <Input
+                    label={t('verification.idNumber')}
+                    variant="bordered"
+                  />
+                  <Input
+                    label={t('verification.phone')}
+                    variant="bordered"
+                  />
                 </div>
               </div>
 
-              {/* Business Document */}
-              <div className="rounded-lg border-2 border-dashed p-6">
-                <div className="flex flex-col items-center gap-4 sm:flex-row">
-                  <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-purple-100">
-                    <Building2 className="h-8 w-8 text-purple-600" />
+              <Divider />
+
+              {/* Document uploads */}
+              <div>
+                <h4 className="mb-4 font-medium">{t('verification.documents')}</h4>
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* ID document front */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">{t('verification.idFront')}</label>
+                    <div className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-amber-500 hover:bg-amber-50">
+                      <FileText className="mb-2 h-10 w-10 text-gray-400" />
+                      <span className="text-sm text-gray-500">{t('verification.clickToUpload')}</span>
+                      <span className="text-xs text-gray-400">PNG, JPG {t('verification.maxSize')}</span>
+                    </div>
                   </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h4 className="font-medium">{t('verification.businessDocument')}</h4>
-                    <p className="text-sm text-gray-500">
-                      ამონაწერი რეესტრიდან ან ლიცენზია
-                    </p>
+
+                  {/* ID document back */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">{t('verification.idBack')}</label>
+                    <div className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-amber-500 hover:bg-amber-50">
+                      <FileText className="mb-2 h-10 w-10 text-gray-400" />
+                      <span className="text-sm text-gray-500">{t('verification.clickToUpload')}</span>
+                      <span className="text-xs text-gray-400">PNG, JPG {t('verification.maxSize')}</span>
+                    </div>
                   </div>
-                  {businessUploaded ? (
-                    <Badge className="bg-green-100 text-green-700">
-                      <CheckCircle className="mr-1 h-4 w-4" />
-                      ატვირთულია
-                    </Badge>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      onClick={() => setBusinessUploaded(true)}
-                      className="gap-2"
-                    >
-                      <Upload className="h-4 w-4" />
-                      ატვირთვა
-                    </Button>
-                  )}
+
+                  {/* Selfie with ID */}
+                  <div className="space-y-2 md:col-span-2">
+                    <label className="text-sm font-medium">{t('verification.selfieWithId')}</label>
+                    <div className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-amber-500 hover:bg-amber-50">
+                      <Camera className="mb-2 h-10 w-10 text-gray-400" />
+                      <span className="text-sm text-gray-500">{t('verification.clickToUpload')}</span>
+                      <span className="text-xs text-gray-400">PNG, JPG {t('verification.maxSize')}</span>
+                    </div>
+                    <p className="text-xs text-gray-400">{t('verification.selfieDescription')}</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Submit button */}
-              <div className="pt-4">
-                <Button
-                  className="w-full bg-amber-500 hover:bg-amber-600"
-                  disabled={!idUploaded}
-                >
+              <Divider />
+
+              {/* Business verification (optional) */}
+              <div>
+                <h4 className="mb-2 font-medium">{t('verification.businessVerification')}</h4>
+                <p className="mb-4 text-sm text-gray-500">{t('verification.businessDescription')}</p>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <Input
+                    label={t('verification.businessName')}
+                    variant="bordered"
+                  />
+                  <Input
+                    label={t('verification.taxId')}
+                    variant="bordered"
+                  />
+                </div>
+                <div className="mt-4 space-y-2">
+                  <label className="text-sm font-medium">{t('verification.businessDocument')}</label>
+                  <div className="flex h-32 cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 transition-colors hover:border-amber-500 hover:bg-amber-50">
+                    <Upload className="mb-2 h-8 w-8 text-gray-400" />
+                    <span className="text-sm text-gray-500">{t('verification.clickToUpload')}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4">
+                <Button variant="bordered">
+                  {t('common.cancel')}
+                </Button>
+                <Button className="bg-amber-500 text-white hover:bg-amber-600">
                   {t('verification.submit')}
                 </Button>
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
-        )}
+        </div>
       </div>
     </div>
   );

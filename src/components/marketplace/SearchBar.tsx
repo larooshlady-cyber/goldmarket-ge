@@ -2,8 +2,7 @@
 
 import { Search } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import { Input, Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface SearchBarProps {
@@ -32,30 +31,29 @@ export function SearchBar({
 
   return (
     <form onSubmit={handleSubmit} className={cn('relative', className)}>
-      <div className="relative">
-        <Search
-          className={cn(
-            'absolute left-3 top-1/2 -translate-y-1/2 text-gray-400',
-            size === 'large' ? 'h-5 w-5' : 'h-4 w-4'
-          )}
-        />
+      <div className="flex gap-2">
         <Input
           type="search"
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
           placeholder={placeholder || t('common.searchPlaceholder')}
-          className={cn(
-            'pr-24',
-            size === 'large' ? 'h-12 pl-11 text-base' : 'h-10 pl-10'
-          )}
+          startContent={<Search className={cn('text-gray-400', size === 'large' ? 'h-5 w-5' : 'h-4 w-4')} />}
+          variant="bordered"
+          radius="md"
+          size={size === 'large' ? 'lg' : 'md'}
+          classNames={{
+            inputWrapper: cn(
+              'border-gray-300 hover:border-gray-400',
+              'data-[focus=true]:border-amber-500',
+              'bg-white'
+            ),
+          }}
         />
         <Button
           type="submit"
-          size={size === 'large' ? 'default' : 'sm'}
-          className={cn(
-            'absolute right-1.5 top-1/2 -translate-y-1/2 bg-amber-500 hover:bg-amber-600',
-            size === 'large' ? 'h-9' : 'h-7'
-          )}
+          size={size === 'large' ? 'md' : 'sm'}
+          color="warning"
+          className="font-medium"
         >
           {t('common.search')}
         </Button>

@@ -7,10 +7,7 @@ import { useLanguage } from '@/lib/i18n';
 import { Container, Breadcrumbs } from '@/components/layout';
 import { ListingGrid } from '@/components/marketplace';
 import { CallButton } from '@/components/listing';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { Avatar, Chip, Card, CardBody, Divider } from '@heroui/react';
 import { getSellerBySlug } from '@/lib/mock/sellers';
 import { getListingsBySellerId } from '@/lib/mock/listings';
 
@@ -51,24 +48,28 @@ export default function SellerPage({ params }: SellerPageProps) {
 
         {/* Seller Header */}
         <Card className="mb-8">
-          <CardContent className="p-6">
+          <CardBody className="p-6">
             <div className="flex flex-col gap-6 md:flex-row md:items-start">
               {/* Avatar and Info */}
               <div className="flex flex-1 gap-4">
-                <Avatar className="h-20 w-20 md:h-24 md:w-24">
-                  <AvatarImage src={seller.avatar} alt={seller.name} />
-                  <AvatarFallback className="text-2xl">
-                    {seller.name.charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <Avatar
+                  src={seller.avatar}
+                  name={seller.name}
+                  className="h-20 w-20 md:h-24 md:w-24"
+                  showFallback
+                />
                 <div className="flex-1">
                   <div className="flex flex-wrap items-center gap-2">
                     <h1 className="text-2xl font-bold text-gray-900">{seller.name}</h1>
                     {seller.verificationStatus === 'verified' && (
-                      <Badge className="bg-green-100 text-green-700 hover:bg-green-100">
-                        <BadgeCheck className="mr-1 h-3 w-3" />
+                      <Chip
+                        color="success"
+                        variant="flat"
+                        size="sm"
+                        startContent={<BadgeCheck className="h-3 w-3" />}
+                      >
                         {t('common.verified')}
-                      </Badge>
+                      </Chip>
                     )}
                   </div>
 
@@ -102,7 +103,7 @@ export default function SellerPage({ params }: SellerPageProps) {
               </div>
             </div>
 
-            <Separator className="my-6" />
+            <Divider className="my-6" />
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4 text-center">
@@ -136,7 +137,7 @@ export default function SellerPage({ params }: SellerPageProps) {
                 <p className="text-sm text-gray-500">{t('sellerProfile.rating')}</p>
               </div>
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Seller Listings */}
@@ -150,9 +151,9 @@ export default function SellerPage({ params }: SellerPageProps) {
             />
           ) : (
             <Card>
-              <CardContent className="flex items-center justify-center py-12">
+              <CardBody className="flex items-center justify-center py-12">
                 <p className="text-gray-500">{t('empty.noListings')}</p>
-              </CardContent>
+              </CardBody>
             </Card>
           )}
         </section>

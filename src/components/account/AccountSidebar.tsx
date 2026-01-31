@@ -5,8 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/lib/i18n';
 import { useAuth } from '@/lib/auth';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { Avatar, Chip } from '@heroui/react';
 import {
   LayoutDashboard,
   ListChecks,
@@ -37,15 +36,24 @@ export function AccountSidebar() {
         {/* User info */}
         <div className="border-b p-4">
           <div className="flex items-center gap-3">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={user?.avatar} alt={user?.name} />
-              <AvatarFallback>{user?.name?.charAt(0) || 'U'}</AvatarFallback>
-            </Avatar>
+            <Avatar
+              src={user?.avatar}
+              name={user?.name?.charAt(0) || 'U'}
+              size="lg"
+              classNames={{
+                base: 'h-12 w-12',
+              }}
+            />
             <div className="min-w-0 flex-1">
               <p className="truncate font-medium">{user?.name || 'User'}</p>
-              <Badge variant={user?.verificationStatus === 'verified' ? 'default' : 'secondary'} className="mt-1">
+              <Chip
+                color={user?.verificationStatus === 'verified' ? 'success' : 'default'}
+                variant="flat"
+                size="sm"
+                className="mt-1"
+              >
                 {user?.verificationStatus === 'verified' ? t('common.verified') : t('common.notVerified')}
-              </Badge>
+              </Chip>
             </div>
           </div>
         </div>

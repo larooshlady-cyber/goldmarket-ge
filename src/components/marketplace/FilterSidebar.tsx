@@ -4,12 +4,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { FilterConfig, FilterValues, georgianCities, purityOptions } from '@/lib/types';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Separator } from '@/components/ui/separator';
+import { Button, Checkbox, Input, Divider } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface FilterSectionProps {
@@ -121,21 +116,29 @@ export function FilterSidebar({
             <Input
               type="number"
               placeholder={t('common.from')}
-              value={values.priceMin ?? ''}
+              value={values.priceMin?.toString() ?? ''}
               onChange={(e) =>
                 handleRangeChange('priceMin', 'priceMax', 'min', e.target.value)
               }
-              className="h-9"
+              variant="bordered"
+              size="sm"
+              classNames={{
+                inputWrapper: 'border-gray-300 h-9 bg-white',
+              }}
             />
             <span className="text-gray-400">-</span>
             <Input
               type="number"
               placeholder={t('common.to')}
-              value={values.priceMax ?? ''}
+              value={values.priceMax?.toString() ?? ''}
               onChange={(e) =>
                 handleRangeChange('priceMin', 'priceMax', 'max', e.target.value)
               }
-              className="h-9"
+              variant="bordered"
+              size="sm"
+              classNames={{
+                inputWrapper: 'border-gray-300 h-9 bg-white',
+              }}
             />
           </div>
         </FilterSection>
@@ -145,21 +148,20 @@ export function FilterSidebar({
       {config.filters.metalType && (
         <FilterSection title={t('filters.metalType')}>
           {metalTypes.map((metal) => (
-            <div key={metal.value} className="flex items-center gap-2">
-              <Checkbox
-                id={`metal-${metal.value}`}
-                checked={values.metalType?.includes(metal.value as any) ?? false}
-                onCheckedChange={(checked) =>
-                  handleCheckboxChange('metalType', metal.value, checked as boolean)
-                }
-              />
-              <Label
-                htmlFor={`metal-${metal.value}`}
-                className="text-sm font-normal text-gray-600"
-              >
-                {metal.label}
-              </Label>
-            </div>
+            <Checkbox
+              key={metal.value}
+              isSelected={values.metalType?.includes(metal.value as any) ?? false}
+              onValueChange={(checked) =>
+                handleCheckboxChange('metalType', metal.value, checked)
+              }
+              color="warning"
+              size="sm"
+              classNames={{
+                label: 'text-sm text-gray-600',
+              }}
+            >
+              {metal.label}
+            </Checkbox>
           ))}
         </FilterSection>
       )}
@@ -168,21 +170,20 @@ export function FilterSidebar({
       {config.filters.stoneType && (
         <FilterSection title={t('filters.stoneType')} defaultOpen={false}>
           {stoneTypes.map((stone) => (
-            <div key={stone.value} className="flex items-center gap-2">
-              <Checkbox
-                id={`stone-${stone.value}`}
-                checked={values.stoneType?.includes(stone.value as any) ?? false}
-                onCheckedChange={(checked) =>
-                  handleCheckboxChange('stoneType', stone.value, checked as boolean)
-                }
-              />
-              <Label
-                htmlFor={`stone-${stone.value}`}
-                className="text-sm font-normal text-gray-600"
-              >
-                {stone.label}
-              </Label>
-            </div>
+            <Checkbox
+              key={stone.value}
+              isSelected={values.stoneType?.includes(stone.value as any) ?? false}
+              onValueChange={(checked) =>
+                handleCheckboxChange('stoneType', stone.value, checked)
+              }
+              color="warning"
+              size="sm"
+              classNames={{
+                label: 'text-sm text-gray-600',
+              }}
+            >
+              {stone.label}
+            </Checkbox>
           ))}
         </FilterSection>
       )}
@@ -191,21 +192,20 @@ export function FilterSidebar({
       {config.filters.purity && (
         <FilterSection title={t('filters.purity')} defaultOpen={false}>
           {[...purityOptions.gold, ...purityOptions.silver].map((purity) => (
-            <div key={purity} className="flex items-center gap-2">
-              <Checkbox
-                id={`purity-${purity}`}
-                checked={values.purity?.includes(purity) ?? false}
-                onCheckedChange={(checked) =>
-                  handleCheckboxChange('purity', purity, checked as boolean)
-                }
-              />
-              <Label
-                htmlFor={`purity-${purity}`}
-                className="text-sm font-normal text-gray-600"
-              >
-                {purity}
-              </Label>
-            </div>
+            <Checkbox
+              key={purity}
+              isSelected={values.purity?.includes(purity) ?? false}
+              onValueChange={(checked) =>
+                handleCheckboxChange('purity', purity, checked)
+              }
+              color="warning"
+              size="sm"
+              classNames={{
+                label: 'text-sm text-gray-600',
+              }}
+            >
+              {purity}
+            </Checkbox>
           ))}
         </FilterSection>
       )}
@@ -217,21 +217,29 @@ export function FilterSidebar({
             <Input
               type="number"
               placeholder={t('common.from')}
-              value={values.weightMin ?? ''}
+              value={values.weightMin?.toString() ?? ''}
               onChange={(e) =>
                 handleRangeChange('weightMin', 'weightMax', 'min', e.target.value)
               }
-              className="h-9"
+              variant="bordered"
+              size="sm"
+              classNames={{
+                inputWrapper: 'border-gray-300 h-9 bg-white',
+              }}
             />
             <span className="text-gray-400">-</span>
             <Input
               type="number"
               placeholder={t('common.to')}
-              value={values.weightMax ?? ''}
+              value={values.weightMax?.toString() ?? ''}
               onChange={(e) =>
                 handleRangeChange('weightMin', 'weightMax', 'max', e.target.value)
               }
-              className="h-9"
+              variant="bordered"
+              size="sm"
+              classNames={{
+                inputWrapper: 'border-gray-300 h-9 bg-white',
+              }}
             />
           </div>
         </FilterSection>
@@ -241,21 +249,20 @@ export function FilterSidebar({
       {config.filters.condition && (
         <FilterSection title={t('filters.condition')} defaultOpen={false}>
           {conditions.map((condition) => (
-            <div key={condition.value} className="flex items-center gap-2">
-              <Checkbox
-                id={`condition-${condition.value}`}
-                checked={values.condition?.includes(condition.value as any) ?? false}
-                onCheckedChange={(checked) =>
-                  handleCheckboxChange('condition', condition.value, checked as boolean)
-                }
-              />
-              <Label
-                htmlFor={`condition-${condition.value}`}
-                className="text-sm font-normal text-gray-600"
-              >
-                {condition.label}
-              </Label>
-            </div>
+            <Checkbox
+              key={condition.value}
+              isSelected={values.condition?.includes(condition.value as any) ?? false}
+              onValueChange={(checked) =>
+                handleCheckboxChange('condition', condition.value, checked)
+              }
+              color="warning"
+              size="sm"
+              classNames={{
+                label: 'text-sm text-gray-600',
+              }}
+            >
+              {condition.label}
+            </Checkbox>
           ))}
         </FilterSection>
       )}
@@ -265,21 +272,20 @@ export function FilterSidebar({
         <FilterSection title={t('common.city')} defaultOpen={false}>
           <div className="max-h-48 space-y-3 overflow-y-auto">
             {georgianCities.slice(0, 10).map((city) => (
-              <div key={city} className="flex items-center gap-2">
-                <Checkbox
-                  id={`city-${city}`}
-                  checked={values.city?.includes(city) ?? false}
-                  onCheckedChange={(checked) =>
-                    handleCheckboxChange('city', city, checked as boolean)
-                  }
-                />
-                <Label
-                  htmlFor={`city-${city}`}
-                  className="text-sm font-normal text-gray-600"
-                >
-                  {city}
-                </Label>
-              </div>
+              <Checkbox
+                key={city}
+                isSelected={values.city?.includes(city) ?? false}
+                onValueChange={(checked) =>
+                  handleCheckboxChange('city', city, checked)
+                }
+                color="warning"
+                size="sm"
+                classNames={{
+                  label: 'text-sm text-gray-600',
+                }}
+              >
+                {city}
+              </Checkbox>
             ))}
           </div>
         </FilterSection>
@@ -288,18 +294,19 @@ export function FilterSidebar({
       {/* Certificate */}
       {config.filters.certificate && (
         <FilterSection title={t('filters.certificate')} defaultOpen={false}>
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="certificate"
-              checked={values.certificate ?? false}
-              onCheckedChange={(checked) =>
-                onChange({ ...values, certificate: checked as boolean })
-              }
-            />
-            <Label htmlFor="certificate" className="text-sm font-normal text-gray-600">
-              {t('filters.hasCertificate')}
-            </Label>
-          </div>
+          <Checkbox
+            isSelected={values.certificate ?? false}
+            onValueChange={(checked) =>
+              onChange({ ...values, certificate: checked })
+            }
+            color="warning"
+            size="sm"
+            classNames={{
+              label: 'text-sm text-gray-600',
+            }}
+          >
+            {t('filters.hasCertificate')}
+          </Checkbox>
         </FilterSection>
       )}
 
@@ -307,21 +314,20 @@ export function FilterSidebar({
       {config.filters.deliveryMethod && (
         <FilterSection title={t('filters.deliveryMethod')} defaultOpen={false}>
           {deliveryMethods.map((method) => (
-            <div key={method.value} className="flex items-center gap-2">
-              <Checkbox
-                id={`delivery-${method.value}`}
-                checked={values.deliveryMethod?.includes(method.value as any) ?? false}
-                onCheckedChange={(checked) =>
-                  handleCheckboxChange('deliveryMethod', method.value, checked as boolean)
-                }
-              />
-              <Label
-                htmlFor={`delivery-${method.value}`}
-                className="text-sm font-normal text-gray-600"
-              >
-                {method.label}
-              </Label>
-            </div>
+            <Checkbox
+              key={method.value}
+              isSelected={values.deliveryMethod?.includes(method.value as any) ?? false}
+              onValueChange={(checked) =>
+                handleCheckboxChange('deliveryMethod', method.value, checked)
+              }
+              color="warning"
+              size="sm"
+              classNames={{
+                label: 'text-sm text-gray-600',
+              }}
+            >
+              {method.label}
+            </Checkbox>
           ))}
         </FilterSection>
       )}
@@ -329,30 +335,28 @@ export function FilterSidebar({
       {/* Seller Verification */}
       {config.filters.sellerVerification && (
         <FilterSection title={t('filters.sellerVerification')} defaultOpen={false}>
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="verified-seller"
-              checked={values.sellerVerification?.includes('verified') ?? false}
-              onCheckedChange={(checked) =>
-                handleCheckboxChange('sellerVerification', 'verified', checked as boolean)
-              }
-            />
-            <Label
-              htmlFor="verified-seller"
-              className="text-sm font-normal text-gray-600"
-            >
-              {t('common.verified')}
-            </Label>
-          </div>
+          <Checkbox
+            isSelected={values.sellerVerification?.includes('verified') ?? false}
+            onValueChange={(checked) =>
+              handleCheckboxChange('sellerVerification', 'verified', checked)
+            }
+            color="warning"
+            size="sm"
+            classNames={{
+              label: 'text-sm text-gray-600',
+            }}
+          >
+            {t('common.verified')}
+          </Checkbox>
         </FilterSection>
       )}
 
       {/* Action Buttons */}
       <div className="flex gap-2 pt-4">
-        <Button onClick={onApply} className="flex-1 bg-amber-500 hover:bg-amber-600">
+        <Button onPress={onApply} color="warning" className="flex-1">
           {t('common.apply')}
         </Button>
-        <Button variant="outline" onClick={onReset} className="flex-1">
+        <Button variant="bordered" onPress={onReset} className="flex-1">
           {t('common.clearFilters')}
         </Button>
       </div>

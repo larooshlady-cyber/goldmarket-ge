@@ -418,18 +418,18 @@ export default function StyleGuidePage() {
                 </CardHeader>
                 <CardBody className="space-y-4">
                   <div className="flex flex-wrap gap-3">
-                    <Chip color="primary">Primary</Chip>
-                    <Chip color="secondary">Secondary</Chip>
-                    <Chip color="success">Success</Chip>
-                    <Chip color="warning">Warning</Chip>
-                    <Chip color="danger">Danger</Chip>
-                    <Chip color="default">Default</Chip>
+                    <Chip color="primary" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Primary</Chip>
+                    <Chip color="secondary" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Secondary</Chip>
+                    <Chip color="success" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Success</Chip>
+                    <Chip color="warning" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Warning</Chip>
+                    <Chip color="danger" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Danger</Chip>
+                    <Chip color="default" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Default</Chip>
                   </div>
                   <div className="flex flex-wrap gap-3">
-                    <Chip variant="flat" color="primary">Flat</Chip>
-                    <Chip variant="bordered" color="primary">Bordered</Chip>
-                    <Chip variant="dot" color="primary">Dot</Chip>
-                    <Chip variant="faded" color="primary">Faded</Chip>
+                    <Chip variant="flat" color="primary" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Flat</Chip>
+                    <Chip variant="bordered" color="primary" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Bordered</Chip>
+                    <Chip variant="dot" color="primary" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Dot</Chip>
+                    <Chip variant="faded" color="primary" radius="md" classNames={{ base: 'px-3 py-2 h-auto' }}>Faded</Chip>
                   </div>
                 </CardBody>
               </Card>
@@ -465,13 +465,25 @@ export default function StyleGuidePage() {
                     placeholder="გამორთული"
                     isDisabled
                   />
+                  <GoldInput
+                    type="number"
+                    label="Number Input"
+                    placeholder="0.00"
+                    startContent={<span className="text-gray-400 text-sm">₾</span>}
+                  />
+                  <GoldInput
+                    label="With Icon"
+                    placeholder="Search..."
+                    startContent={<Search className="h-4 w-4 text-gray-400" />}
+                    isClearable
+                  />
                 </CardBody>
               </Card>
 
               {/* Select */}
               <Card className="border border-gray-100">
                 <CardHeader className="pb-0">
-                  <h3 className="text-lg font-semibold">Select</h3>
+                  <h3 className="text-lg font-semibold">Select Dropdowns</h3>
                 </CardHeader>
                 <CardBody className="space-y-4">
                   <GoldSelect
@@ -487,10 +499,29 @@ export default function StyleGuidePage() {
                   <GoldSelect
                     label="Metal Type"
                     placeholder="აირჩიეთ ლითონი"
+                    description="Select the primary metal"
                     options={[
-                      { key: 'gold', label: 'ოქრო' },
-                      { key: 'silver', label: 'ვერცხლი' },
-                      { key: 'platinum', label: 'პლატინა' },
+                      { key: 'gold', label: 'ოქრო', description: '585, 750' },
+                      { key: 'silver', label: 'ვერცხლი', description: '925' },
+                      { key: 'platinum', label: 'პლატინა', description: '950' },
+                    ]}
+                  />
+                  <GoldSelect
+                    label="With Error"
+                    placeholder="აირჩიეთ"
+                    isInvalid
+                    errorMessage="Please select an option"
+                    options={[
+                      { key: 'option1', label: 'Option 1' },
+                      { key: 'option2', label: 'Option 2' },
+                    ]}
+                  />
+                  <GoldSelect
+                    label="Disabled"
+                    placeholder="გამორთული"
+                    isDisabled
+                    options={[
+                      { key: 'disabled', label: 'Disabled option' },
                     ]}
                   />
                 </CardBody>
@@ -502,15 +533,22 @@ export default function StyleGuidePage() {
                   <h3 className="text-lg font-semibold">Checkboxes & Switches</h3>
                 </CardHeader>
                 <CardBody className="space-y-4">
-                  <div className="flex flex-wrap gap-6">
-                    <GoldCheckbox defaultSelected>ოქრო</GoldCheckbox>
-                    <GoldCheckbox>ვერცხლი</GoldCheckbox>
-                    <GoldCheckbox>პლატინა</GoldCheckbox>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-gray-700">Individual Checkboxes</p>
+                    <div className="flex flex-wrap gap-6">
+                      <GoldCheckbox defaultSelected>ოქრო</GoldCheckbox>
+                      <GoldCheckbox>ვერცხლი</GoldCheckbox>
+                      <GoldCheckbox isDisabled>პლატინა</GoldCheckbox>
+                    </div>
                   </div>
                   <Divider />
-                  <div className="flex flex-wrap gap-6">
-                    <GoldSwitch defaultSelected>აქტიური განცხადება</GoldSwitch>
-                    <GoldSwitch>შეტყობინებები</GoldSwitch>
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium text-gray-700">Switches</p>
+                    <div className="flex flex-wrap gap-6">
+                      <GoldSwitch defaultSelected>აქტიური განცხადება</GoldSwitch>
+                      <GoldSwitch>შეტყობინებები</GoldSwitch>
+                      <GoldSwitch isDisabled>გამორთული</GoldSwitch>
+                    </div>
                   </div>
                 </CardBody>
               </Card>
@@ -520,14 +558,25 @@ export default function StyleGuidePage() {
                 <CardHeader className="pb-0">
                   <h3 className="text-lg font-semibold">Radio Groups</h3>
                 </CardHeader>
-                <CardBody>
+                <CardBody className="space-y-4">
                   <GoldRadioGroup
-                    label="მდგომარეობა"
+                    label="მდგომარეობა (Vertical)"
                     options={[
                       { value: 'new', label: 'ახალი', description: 'არ არის გამოყენებული' },
                       { value: 'used', label: 'მეორადი', description: 'გამოყენებული მდგომარეობა' },
                     ]}
                     defaultValue="new"
+                  />
+                  <Divider />
+                  <GoldRadioGroup
+                    label="მიწოდება (Horizontal)"
+                    orientation="horizontal"
+                    options={[
+                      { value: 'pickup', label: 'ადგილზე' },
+                      { value: 'delivery', label: 'მიტანა' },
+                      { value: 'both', label: 'ორივე' },
+                    ]}
+                    defaultValue="pickup"
                   />
                 </CardBody>
               </Card>

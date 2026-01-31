@@ -2,7 +2,7 @@
 
 import { Phone } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface CallButtonProps {
@@ -16,17 +16,14 @@ export function CallButton({ phone, className, size = 'default' }: CallButtonPro
 
   return (
     <Button
-      asChild
-      className={cn(
-        'bg-green-600 hover:bg-green-700',
-        size === 'lg' && 'h-12 text-base',
-        className
-      )}
+      as="a"
+      href={`tel:${phone}`}
+      color="success"
+      size={size === 'lg' ? 'lg' : 'md'}
+      className={cn('font-medium', className)}
+      startContent={<Phone className={cn(size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} />}
     >
-      <a href={`tel:${phone}`}>
-        <Phone className={cn('mr-2', size === 'lg' ? 'h-5 w-5' : 'h-4 w-4')} />
-        {t('common.call')}
-      </a>
+      {t('common.call')}
     </Button>
   );
 }

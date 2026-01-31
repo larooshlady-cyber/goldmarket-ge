@@ -63,8 +63,13 @@
 }
 
 :root {
-  /* Base radius */
-  --radius: 0.625rem;
+  /* Base radius - Standard sizes: 8px, 12px, 16px, 20px */
+  --radius: 0.75rem; /* 12px */
+  --radius-sm: 0.5rem; /* 8px */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.25rem; /* 20px */
+  --radius-2xl: 1.5rem; /* 24px */
   
   /* GoldMarket Brand Colors - Logo Gold */
   --gold: #FFB011;
@@ -459,3 +464,201 @@ body {
   animation: shimmer 1.5s infinite;
   border-radius: 0.375rem;
 }
+
+/* ====================================
+   HeroUI Global Component Overrides
+   Super Rounded: 8px-12px borders
+   ==================================== */
+
+/* Buttons - 12px radius */
+[data-slot="button"],
+button[class*="bg-"][class*="text-"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Input wrapper - 12px radius */
+[data-slot="input-wrapper"],
+[data-slot="inner-wrapper"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Main input wrapper container */
+[data-slot="base"][data-filled="true"],
+[data-slot="base"]:has([data-slot="input-wrapper"]) {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Select/Dropdown trigger - 12px radius */
+[data-slot="trigger"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Select/Dropdown popover - 12px radius */
+[data-slot="popover"],
+[data-slot="content"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Listbox wrapper - 8px radius */
+[data-slot="listbox"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Listbox items - 8px radius */
+[data-slot="listboxwrapper"] li,
+[role="option"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Cards - 16px radius */
+[data-slot="base"]:not(:has([data-slot="input-wrapper"])):not([data-filled]) {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* Card specific */
+.shadow-md[class*="bg-"],
+.shadow-sm[class*="bg-"] {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* Modal - 16px radius */
+[data-slot="wrapper"] > [data-slot="base"] {
+  border-radius: var(--radius-lg) !important;
+}
+
+[role="dialog"] {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* Chips/Badges - 16px super rounded */
+[data-slot="chip"],
+[data-slot="base"][class*="chip"] {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* Badges - 16px super rounded */
+span[class*="badge"],
+[class*="Badge"] {
+  border-radius: var(--radius-lg) !important;
+}
+
+/* Tabs - 12px radius */
+[data-slot="tabList"] {
+  border-radius: var(--radius-md) !important;
+}
+
+[data-slot="tab"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+[data-slot="tabContent"],
+[data-slot="panel"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Accordion - 12px radius */
+[data-slot="accordion"] {
+  border-radius: var(--radius-md) !important;
+}
+
+[data-slot="accordion"] > div {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Tooltip - 8px radius */
+[data-slot="tooltip"],
+[role="tooltip"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Avatar - full rounded (circle) */
+[data-slot="avatar"],
+[data-slot="img"] {
+  border-radius: 9999px !important;
+}
+
+/* Checkbox/Radio - 6px radius for checkbox, full for radio */
+[data-slot="wrapper"][aria-checked] {
+  border-radius: 6px !important;
+}
+
+/* Switch - full rounded */
+[data-slot="wrapper"][role="switch"] {
+  border-radius: 9999px !important;
+}
+
+/* Progress bar - 8px radius */
+[data-slot="track"],
+[data-slot="indicator"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Skeleton - 8px radius */
+[data-slot="skeleton"],
+.animate-pulse {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Divider - already flat */
+
+/* Navbar - 0 or 12px depending on variant */
+[data-slot="navbar"] {
+  border-radius: 0 !important;
+}
+
+/* Dropdown menu - 12px radius */
+[data-slot="menu"] {
+  border-radius: var(--radius-md) !important;
+}
+
+[data-slot="menuitem"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Image - 12px radius by default */
+img:not([data-slot="img"]):not([class*="rounded-full"]) {
+  border-radius: var(--radius-md);
+}
+
+/* Table cells - subtle radius */
+[data-slot="td"],
+[data-slot="th"] {
+  border-radius: 0 !important;
+}
+
+/* Pagination - 8px radius */
+[data-slot="pagination"] button,
+[data-slot="item"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* Spinner - keep circular */
+[data-slot="spinner"] {
+  border-radius: 9999px !important;
+}
+
+/* Alert/Callout - 12px radius */
+[role="alert"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Breadcrumb items */
+[data-slot="breadcrumbs"] {
+  border-radius: var(--radius-sm) !important;
+}
+
+/* User/Profile cards */
+[data-slot="user"] {
+  border-radius: var(--radius-md) !important;
+}
+
+/* ====================================
+   Additional Tailwind Overrides
+   ==================================== */
+
+/* Ensure all rounded-* classes work well */
+.rounded-sm { border-radius: var(--radius-sm) !important; }
+.rounded-md { border-radius: var(--radius-md) !important; }
+.rounded-lg { border-radius: var(--radius-lg) !important; }
+.rounded-xl { border-radius: var(--radius-xl) !important; }
+.rounded-2xl { border-radius: var(--radius-2xl) !important; }

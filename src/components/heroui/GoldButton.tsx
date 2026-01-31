@@ -8,7 +8,7 @@ export interface GoldButtonProps extends Omit<ButtonProps, 'color'> {
 }
 
 export const GoldButton = forwardRef<HTMLButtonElement, GoldButtonProps>(
-  ({ colorScheme = 'primary', className = '', ...props }, ref) => {
+  ({ colorScheme = 'primary', className = '', radius = 'lg', ...props }, ref) => {
     const colorClasses: Record<string, string> = {
       primary: 'bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00] data-[hover=true]:bg-[#E09D00]',
       secondary: 'bg-[#0D6B5F] text-white font-semibold hover:bg-[#0A5A50] data-[hover=true]:bg-[#0A5A50]',
@@ -22,6 +22,7 @@ export const GoldButton = forwardRef<HTMLButtonElement, GoldButtonProps>(
       <Button
         ref={ref}
         className={`font-medium transition-all ${colorClasses[colorScheme]} ${className}`}
+        radius={radius}
         {...props}
       />
     );

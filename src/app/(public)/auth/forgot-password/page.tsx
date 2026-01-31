@@ -34,8 +34,8 @@ export default function ForgotPasswordPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FFF8E6] via-white to-[#FFF8E6] py-12 px-4">
       <Container size="small">
         <div className="mx-auto max-w-md">
-          <Card className="border border-gray-200 shadow-xl">
-            <CardHeader className="flex flex-col items-center gap-4 pt-8 pb-2">
+          <Card className="border border-gray-200 shadow-xl" radius="lg">
+            <CardHeader className="flex flex-col items-center gap-4 px-8 pt-10 pb-4">
               <Link href="/">
                 <Image
                   src="/logo-icon.svg"
@@ -71,12 +71,11 @@ export default function ForgotPasswordPage() {
 
             <CardBody className="px-8 py-6">
               {isSubmitted ? (
-                <div className="space-y-4">
+                <div className="space-y-5">
                   <Button
                     as={Link}
                     href="/auth/login"
-                    className="w-full bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00]"
-                    size="lg"
+                    className="w-full h-14 bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00] text-base"
                     radius="lg"
                   >
                     დაბრუნება ავტორიზაციაზე
@@ -93,7 +92,7 @@ export default function ForgotPasswordPage() {
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-5">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   <Input
                     type="email"
                     label={t('auth.emailLabel')}
@@ -102,16 +101,19 @@ export default function ForgotPasswordPage() {
                     onValueChange={setEmail}
                     startContent={<Mail className="h-4 w-4 text-gray-400" />}
                     classNames={{
-                      inputWrapper: 'border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011]',
+                      inputWrapper: 'h-14 border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011] rounded-xl',
+                      label: 'text-gray-600 font-medium',
+                      input: 'text-base',
                     }}
                     variant="bordered"
+                    radius="lg"
+                    size="lg"
                     isRequired
                   />
 
                   <Button
                     type="submit"
-                    className="w-full bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00]"
-                    size="lg"
+                    className="w-full h-14 bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00] text-base"
                     radius="lg"
                     isLoading={isLoading}
                   >
@@ -121,7 +123,7 @@ export default function ForgotPasswordPage() {
               )}
             </CardBody>
 
-            <CardFooter className="justify-center pb-8">
+            <CardFooter className="justify-center pb-10 pt-2">
               <Link
                 href="/auth/login"
                 className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900"

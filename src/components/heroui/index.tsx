@@ -88,7 +88,7 @@ export {
 
 // GoldMarket styled components
 export { GoldButton } from './GoldButton';
-export { GoldInput } from './GoldInput';
+export { GoldInput, GoldTextarea } from './GoldInput';
 export { GoldCard, GoldCardHeader, GoldCardBody, GoldCardFooter } from './GoldCard';
 export { VipBadge, StatusBadge, VerificationBadge } from './GoldBadges';
 export { GoldTable, TableHeader as GoldTableHeader, TableColumn as GoldTableColumn, TableBody as GoldTableBody, TableRow as GoldTableRow, TableCell as GoldTableCell } from './GoldTable';
@@ -96,8 +96,8 @@ export { GoldModal, useDisclosure as useGoldModal } from './GoldModal';
 export { GoldTabs, GoldTabsBordered } from './GoldTabs';
 export { GoldPagination } from './GoldPagination';
 export { GoldAccordion, GoldAccordionBordered } from './GoldAccordion';
-export { GoldSelect } from './GoldSelect';
-export { GoldCheckbox, GoldSwitch, GoldRadioGroup } from './GoldFormControls';
+export { GoldSelect, GoldMultiSelect } from './GoldSelect';
+export { GoldCheckbox, GoldCheckboxGroup, GoldSwitch, GoldRadioGroup } from './GoldFormControls';
 export { GoldAvatar, GoldUser } from './GoldAvatar';
 export { 
   GoldSkeleton, 
@@ -109,7 +109,7 @@ export {
 } from './GoldSkeletons';
 
 // Types
-export type { GoldButtonProps } from './GoldButton';
+export type { GoldButtonProps, GoldTextareaProps } from './GoldInput';
 export type { GoldInputProps } from './GoldInput';
 export type { GoldCardProps } from './GoldCard';
 export type { VipLevel, VipBadgeProps, ListingStatus, StatusBadgeProps, VerificationBadgeProps } from './GoldBadges';
@@ -118,6 +118,6 @@ export type { GoldModalProps } from './GoldModal';
 export type { GoldTabsProps } from './GoldTabs';
 export type { GoldPaginationProps } from './GoldPagination';
 export type { GoldAccordionProps, GoldAccordionItem } from './GoldAccordion';
-export type { GoldSelectProps, SelectOption } from './GoldSelect';
-export type { GoldRadioOption, GoldRadioGroupProps } from './GoldFormControls';
+export type { GoldSelectProps, SelectOption, SelectOptionGroup, GoldMultiSelectProps } from './GoldSelect';
+export type { GoldRadioOption, GoldRadioGroupProps, GoldCheckboxOption, GoldCheckboxGroupProps, GoldSwitchProps, GoldCheckboxProps } from './GoldFormControls';
 export type { GoldAvatarProps, GoldUserProps } from './GoldAvatar';

@@ -3,14 +3,7 @@
 import { useState } from 'react';
 import { useLanguage } from '@/lib/i18n';
 import { useAuth } from '@/lib/auth';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
+import { Card, CardBody, CardHeader, Tabs, Tab, Input, Button, Avatar, Switch, Divider } from '@heroui/react';
 import { User, Lock, Bell, Camera } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -44,12 +37,10 @@ export default function SettingsPage() {
   };
 
   const handleSaveProfile = () => {
-    // Mock save
     alert('Profile saved!');
   };
 
   const handleChangePassword = () => {
-    // Mock password change
     alert('Password changed!');
   };
 
@@ -60,149 +51,147 @@ export default function SettingsPage() {
       </div>
 
       <div className="mx-auto max-w-3xl">
-        <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="profile" className="gap-2">
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('settings.profile')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="security" className="gap-2">
-              <Lock className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('settings.security')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="notifications" className="gap-2">
-              <Bell className="h-4 w-4" />
-              <span className="hidden sm:inline">{t('settings.notifications')}</span>
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Profile tab */}
-          <TabsContent value="profile">
-            <Card>
+        <Tabs aria-label="Settings tabs" color="warning" variant="underlined">
+          <Tab
+            key="profile"
+            title={
+              <div className="flex items-center gap-2">
+                <User className="h-4 w-4" />
+                <span className="hidden sm:inline">{t('settings.profile')}</span>
+              </div>
+            }
+          >
+            <Card className="mt-4">
               <CardHeader>
-                <CardTitle>{t('settings.profileInfo')}</CardTitle>
+                <h3 className="text-lg font-semibold">{t('settings.profileInfo')}</h3>
               </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Avatar */}
+              <CardBody className="space-y-6">
                 <div className="flex items-center gap-4">
-                  <Avatar className="h-20 w-20">
-                    <AvatarImage src={user?.avatar} alt={user?.name} />
-                    <AvatarFallback className="text-2xl">
-                      {user?.name?.charAt(0) || 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Button variant="outline" className="gap-2">
-                    <Camera className="h-4 w-4" />
+                  <Avatar
+                    src={user?.avatar}
+                    name={user?.name?.charAt(0) || 'U'}
+                    size="lg"
+                    classNames={{ base: 'h-20 w-20', name: 'text-2xl' }}
+                  />
+                  <Button variant="bordered" startContent={<Camera className="h-4 w-4" />}>
                     ფოტოს შეცვლა
                   </Button>
                 </div>
 
-                <Separator />
+                <Divider />
 
-                {/* Form fields */}
                 <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">{t('auth.nameLabel')}</Label>
-                    <Input
-                      id="name"
-                      value={profileData.name}
-                      onChange={(e) => handleProfileChange('name', e.target.value)}
-                    />
-                  </div>
+                  <Input
+                    label={t('auth.nameLabel')}
+                    value={profileData.name}
+                    onChange={(e) => handleProfileChange('name', e.target.value)}
+                    variant="bordered"
+                    labelPlacement="outside"
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email">{t('auth.emailLabel')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={profileData.email}
-                      onChange={(e) => handleProfileChange('email', e.target.value)}
-                    />
-                  </div>
+                  <Input
+                    label={t('auth.emailLabel')}
+                    type="email"
+                    value={profileData.email}
+                    onChange={(e) => handleProfileChange('email', e.target.value)}
+                    variant="bordered"
+                    labelPlacement="outside"
+                  />
 
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">{t('auth.phoneLabel')}</Label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={profileData.phone}
-                      onChange={(e) => handleProfileChange('phone', e.target.value)}
-                    />
-                  </div>
+                  <Input
+                    label={t('auth.phoneLabel')}
+                    type="tel"
+                    value={profileData.phone}
+                    onChange={(e) => handleProfileChange('phone', e.target.value)}
+                    variant="bordered"
+                    labelPlacement="outside"
+                  />
                 </div>
 
-                <Button onClick={handleSaveProfile} className="bg-amber-500 hover:bg-amber-600">
+                <Button onPress={handleSaveProfile} color="warning">
                   {t('common.save')}
                 </Button>
-              </CardContent>
+              </CardBody>
             </Card>
-          </TabsContent>
+          </Tab>
 
-          {/* Security tab */}
-          <TabsContent value="security">
-            <Card>
+          <Tab
+            key="security"
+            title={
+              <div className="flex items-center gap-2">
+                <Lock className="h-4 w-4" />
+                <span className="hidden sm:inline">{t('settings.security')}</span>
+              </div>
+            }
+          >
+            <Card className="mt-4">
               <CardHeader>
-                <CardTitle>{t('settings.changePassword')}</CardTitle>
+                <h3 className="text-lg font-semibold">{t('settings.changePassword')}</h3>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="currentPassword">{t('settings.currentPassword')}</Label>
-                  <Input
-                    id="currentPassword"
-                    type="password"
-                    value={passwordData.currentPassword}
-                    onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
-                  />
-                </div>
+              <CardBody className="space-y-4">
+                <Input
+                  label={t('settings.currentPassword')}
+                  type="password"
+                  value={passwordData.currentPassword}
+                  onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
+                  variant="bordered"
+                  labelPlacement="outside"
+                />
 
-                <div className="space-y-2">
-                  <Label htmlFor="newPassword">{t('settings.newPassword')}</Label>
-                  <Input
-                    id="newPassword"
-                    type="password"
-                    value={passwordData.newPassword}
-                    onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
-                  />
-                </div>
+                <Input
+                  label={t('settings.newPassword')}
+                  type="password"
+                  value={passwordData.newPassword}
+                  onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
+                  variant="bordered"
+                  labelPlacement="outside"
+                />
 
-                <div className="space-y-2">
-                  <Label htmlFor="confirmNewPassword">{t('settings.confirmNewPassword')}</Label>
-                  <Input
-                    id="confirmNewPassword"
-                    type="password"
-                    value={passwordData.confirmPassword}
-                    onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
-                  />
-                </div>
+                <Input
+                  label={t('settings.confirmNewPassword')}
+                  type="password"
+                  value={passwordData.confirmPassword}
+                  onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
+                  variant="bordered"
+                  labelPlacement="outside"
+                />
 
-                <Button onClick={handleChangePassword} className="bg-amber-500 hover:bg-amber-600">
+                <Button onPress={handleChangePassword} color="warning">
                   {t('settings.changePassword')}
                 </Button>
-              </CardContent>
+              </CardBody>
             </Card>
-          </TabsContent>
+          </Tab>
 
-          {/* Notifications tab */}
-          <TabsContent value="notifications">
-            <Card>
+          <Tab
+            key="notifications"
+            title={
+              <div className="flex items-center gap-2">
+                <Bell className="h-4 w-4" />
+                <span className="hidden sm:inline">{t('settings.notifications')}</span>
+              </div>
+            }
+          >
+            <Card className="mt-4">
               <CardHeader>
-                <CardTitle>{t('settings.notifications')}</CardTitle>
+                <h3 className="text-lg font-semibold">{t('settings.notifications')}</h3>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardBody className="space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="font-medium">{t('settings.emailNotifications')}</p>
                     <p className="text-sm text-gray-500">მიიღეთ შეტყობინებები ელ-ფოსტით</p>
                   </div>
                   <Switch
-                    checked={notifications.email}
-                    onCheckedChange={(checked) =>
+                    isSelected={notifications.email}
+                    onValueChange={(checked) =>
                       setNotifications((prev) => ({ ...prev, email: checked }))
                     }
+                    color="warning"
                   />
                 </div>
 
-                <Separator />
+                <Divider />
 
                 <div className="flex items-center justify-between">
                   <div>
@@ -210,14 +199,15 @@ export default function SettingsPage() {
                     <p className="text-sm text-gray-500">მიიღეთ შეტყობინებები SMS-ით</p>
                   </div>
                   <Switch
-                    checked={notifications.sms}
-                    onCheckedChange={(checked) =>
+                    isSelected={notifications.sms}
+                    onValueChange={(checked) =>
                       setNotifications((prev) => ({ ...prev, sms: checked }))
                     }
+                    color="warning"
                   />
                 </div>
 
-                <Separator />
+                <Divider />
 
                 <div className="flex items-center justify-between">
                   <div>
@@ -225,19 +215,20 @@ export default function SettingsPage() {
                     <p className="text-sm text-gray-500">მიიღეთ Push შეტყობინებები</p>
                   </div>
                   <Switch
-                    checked={notifications.push}
-                    onCheckedChange={(checked) =>
+                    isSelected={notifications.push}
+                    onValueChange={(checked) =>
                       setNotifications((prev) => ({ ...prev, push: checked }))
                     }
+                    color="warning"
                   />
                 </div>
 
-                <Button className="bg-amber-500 hover:bg-amber-600">
+                <Button color="warning">
                   {t('common.save')}
                 </Button>
-              </CardContent>
+              </CardBody>
             </Card>
-          </TabsContent>
+          </Tab>
         </Tabs>
       </div>
     </div>

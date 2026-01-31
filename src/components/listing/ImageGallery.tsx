@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface ImageGalleryProps {
@@ -43,18 +43,20 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
         {images.length > 1 && (
           <>
             <Button
-              variant="outline"
-              size="icon"
+              variant="flat"
+              size="sm"
+              isIconOnly
               className="absolute left-2 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full bg-white/80 shadow-md hover:bg-white"
-              onClick={handlePrevious}
+              onPress={handlePrevious}
             >
               <ChevronLeft className="h-5 w-5" />
             </Button>
             <Button
-              variant="outline"
-              size="icon"
+              variant="flat"
+              size="sm"
+              isIconOnly
               className="absolute right-2 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full bg-white/80 shadow-md hover:bg-white"
-              onClick={handleNext}
+              onPress={handleNext}
             >
               <ChevronRight className="h-5 w-5" />
             </Button>

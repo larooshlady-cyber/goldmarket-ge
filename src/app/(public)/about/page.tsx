@@ -3,7 +3,7 @@
 import { Shield, Users, Award, Clock } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { Container, Breadcrumbs } from '@/components/layout';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardBody } from '@heroui/react';
 
 export default function AboutPage() {
   const { t } = useLanguage();
@@ -48,7 +48,7 @@ export default function AboutPage() {
           </div>
 
           <Card>
-            <CardContent className="p-6">
+            <CardBody className="p-6">
               <h2 className="mb-4 text-xl font-semibold text-gray-900">
                 ჩვენი მისია
               </h2>
@@ -58,13 +58,13 @@ export default function AboutPage() {
                 ერთმანეთს. ჩვენ ვაკავშირებთ ძვირფასი ლითონების მოყვარულებს, 
                 კოლექციონერებს და პროფესიონალ საიუველირეებს მთელი საქართველოდან.
               </p>
-            </CardContent>
+            </CardBody>
           </Card>
 
           <div className="grid gap-4 sm:grid-cols-2">
             {features.map((feature, index) => (
               <Card key={index}>
-                <CardContent className="flex gap-4 p-6">
+                <CardBody className="flex gap-4 p-6">
                   <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100">
                     <feature.icon className="h-6 w-6 text-amber-600" />
                   </div>
@@ -72,13 +72,13 @@ export default function AboutPage() {
                     <h3 className="font-semibold text-gray-900">{feature.title}</h3>
                     <p className="mt-1 text-sm text-gray-600">{feature.description}</p>
                   </div>
-                </CardContent>
+                </CardBody>
               </Card>
             ))}
           </div>
 
           <Card>
-            <CardContent className="p-6">
+            <CardBody className="p-6">
               <h2 className="mb-4 text-xl font-semibold text-gray-900">
                 რას გთავაზობთ
               </h2>
@@ -104,7 +104,7 @@ export default function AboutPage() {
                   ლუქს საათები
                 </li>
               </ul>
-            </CardContent>
+            </CardBody>
           </Card>
         </div>
       </Container>

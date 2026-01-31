@@ -1,7 +1,7 @@
 'use client';
 
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface PaginationProps {
@@ -25,14 +25,12 @@ export function Pagination({
       return Array.from({ length: totalPages }, (_, i) => i + 1);
     }
 
-    // Always show first page
     pages.push(1);
 
     if (currentPage > 3) {
       pages.push('...');
     }
 
-    // Show pages around current
     for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
       pages.push(i);
     }
@@ -41,7 +39,6 @@ export function Pagination({
       pages.push('...');
     }
 
-    // Always show last page
     if (totalPages > 1) {
       pages.push(totalPages);
     }
@@ -54,11 +51,12 @@ export function Pagination({
   return (
     <div className={cn('flex items-center justify-center gap-1', className)}>
       <Button
-        variant="outline"
-        size="icon"
-        className="h-9 w-9"
-        disabled={currentPage === 1}
-        onClick={() => onPageChange(currentPage - 1)}
+        variant="bordered"
+        size="sm"
+        isIconOnly
+        isDisabled={currentPage === 1}
+        onPress={() => onPageChange(currentPage - 1)}
+        className="h-9 w-9 min-w-9"
       >
         <ChevronLeft className="h-4 w-4" />
       </Button>
@@ -75,13 +73,12 @@ export function Pagination({
         return (
           <Button
             key={page}
-            variant={currentPage === page ? 'default' : 'outline'}
-            size="icon"
-            className={cn(
-              'h-9 w-9',
-              currentPage === page && 'bg-amber-500 hover:bg-amber-600'
-            )}
-            onClick={() => onPageChange(page as number)}
+            variant={currentPage === page ? 'solid' : 'bordered'}
+            color={currentPage === page ? 'warning' : 'default'}
+            size="sm"
+            isIconOnly
+            onPress={() => onPageChange(page as number)}
+            className="h-9 w-9 min-w-9"
           >
             {page}
           </Button>
@@ -89,11 +86,12 @@ export function Pagination({
       })}
 
       <Button
-        variant="outline"
-        size="icon"
-        className="h-9 w-9"
-        disabled={currentPage === totalPages}
-        onClick={() => onPageChange(currentPage + 1)}
+        variant="bordered"
+        size="sm"
+        isIconOnly
+        isDisabled={currentPage === totalPages}
+        onPress={() => onPageChange(currentPage + 1)}
+        className="h-9 w-9 min-w-9"
       >
         <ChevronRight className="h-4 w-4" />
       </Button>

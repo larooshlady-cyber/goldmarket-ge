@@ -1,10 +1,7 @@
 'use client';
 
 import { useLanguage } from '@/lib/i18n';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import { Card, CardBody, CardHeader, Button, Chip, Input } from '@heroui/react';
 import {
   Wallet,
   CreditCard,
@@ -57,7 +54,7 @@ export default function WalletPage() {
         <div className="space-y-6 lg:col-span-1">
           {/* Current balance */}
           <Card className="bg-gradient-to-br from-amber-500 to-amber-600">
-            <CardContent className="p-6 text-white">
+            <CardBody className="p-6 text-white">
               <div className="flex items-center gap-3">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20">
                   <Wallet className="h-6 w-6" />
@@ -67,18 +64,18 @@ export default function WalletPage() {
                   <p className="text-3xl font-bold">{balance} {t('common.currency')}</p>
                 </div>
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
 
           {/* Top up */}
           <Card>
             <CardHeader>
-              <CardTitle>{t('account.topUp')}</CardTitle>
+              <h3 className="text-lg font-semibold">{t('account.topUp')}</h3>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardBody className="space-y-4">
               <div className="space-y-2">
                 <p className="text-sm text-gray-500">{t('wallet.topUpAmount')}</p>
-                <Input type="number" placeholder="0" className="text-lg" />
+                <Input type="number" placeholder="0" variant="bordered" size="lg" />
               </div>
 
               <div className="flex flex-wrap gap-2">
@@ -95,33 +92,33 @@ export default function WalletPage() {
               <div className="space-y-2 pt-4">
                 <p className="text-sm font-medium">{t('wallet.topUpMethods')}</p>
                 <div className="grid gap-2">
-                  <Button variant="outline" className="justify-start gap-3">
+                  <Button variant="bordered" className="justify-start gap-3">
                     <Building2 className="h-5 w-5" />
                     {t('wallet.bank')}
                   </Button>
-                  <Button variant="outline" className="justify-start gap-3">
+                  <Button variant="bordered" className="justify-start gap-3">
                     <Smartphone className="h-5 w-5" />
                     {t('wallet.terminal')}
                   </Button>
-                  <Button variant="outline" className="justify-start gap-3">
+                  <Button variant="bordered" className="justify-start gap-3">
                     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/>
                     </svg>
                     {t('wallet.googlePay')}
                   </Button>
-                  <Button variant="outline" className="justify-start gap-3">
+                  <Button variant="bordered" className="justify-start gap-3">
                     <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M17.72 9.63c-.27-.2-.66-.13-.84.15l-3.41 5.23-1.42-1.42c-.26-.26-.68-.26-.94 0-.26.26-.26.68 0 .94l1.95 1.95c.12.12.29.19.47.19h.05c.19-.01.36-.11.47-.26l3.83-5.87c.19-.29.11-.68-.16-.91zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
                     </svg>
                     {t('wallet.applePay')}
                   </Button>
-                  <Button variant="outline" className="justify-start gap-3">
+                  <Button variant="bordered" className="justify-start gap-3">
                     <Bitcoin className="h-5 w-5" />
                     {t('wallet.crypto')}
                   </Button>
                 </div>
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
         </div>
 
@@ -130,9 +127,9 @@ export default function WalletPage() {
           {/* Recent transactions */}
           <Card>
             <CardHeader>
-              <CardTitle>{t('wallet.recentTransactions')}</CardTitle>
+              <h3 className="text-lg font-semibold">{t('wallet.recentTransactions')}</h3>
             </CardHeader>
-            <CardContent>
+            <CardBody>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -161,9 +158,9 @@ export default function WalletPage() {
                             {new Date(tx.date).toLocaleDateString()}
                           </td>
                           <td className="py-3">
-                            <Badge variant="outline" className="bg-green-50 text-green-700">
+                            <Chip color="success" variant="flat" size="sm">
                               {t('common.success')}
-                            </Badge>
+                            </Chip>
                           </td>
                         </tr>
                       );
@@ -171,20 +168,20 @@ export default function WalletPage() {
                   </tbody>
                 </table>
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
 
           {/* Purchase history */}
           <Card>
             <CardHeader>
-              <CardTitle>{t('wallet.purchaseHistory')}</CardTitle>
+              <h3 className="text-lg font-semibold">{t('wallet.purchaseHistory')}</h3>
             </CardHeader>
-            <CardContent>
+            <CardBody>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b text-left text-sm text-gray-500">
-                      <th className="pb-3 pr-4">{t('common.title')}</th>
+                      <th className="pb-3 pr-4">{t('wallet.purchaseName')}</th>
                       <th className="pb-3 pr-4">{t('wallet.transactionAmount')}</th>
                       <th className="pb-3">{t('wallet.transactionDate')}</th>
                     </tr>
@@ -193,9 +190,7 @@ export default function WalletPage() {
                     {mockPurchases.map((purchase) => (
                       <tr key={purchase.id} className="border-b last:border-0">
                         <td className="py-3 pr-4 font-medium">{purchase.name}</td>
-                        <td className="py-3 pr-4">
-                          {purchase.amount} {t('common.currency')}
-                        </td>
+                        <td className="py-3 pr-4">{purchase.amount} {t('common.currency')}</td>
                         <td className="py-3 text-sm text-gray-500">
                           {new Date(purchase.date).toLocaleDateString()}
                         </td>
@@ -204,7 +199,7 @@ export default function WalletPage() {
                   </tbody>
                 </table>
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
         </div>
       </div>

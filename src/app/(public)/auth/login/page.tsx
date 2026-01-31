@@ -43,8 +43,8 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#FFF8E6] via-white to-[#FFF8E6] py-12 px-4">
       <Container size="small">
         <div className="mx-auto max-w-md">
-          <Card className="border border-gray-200 shadow-xl">
-            <CardHeader className="flex flex-col items-center gap-4 pt-8 pb-2">
+          <Card className="border border-gray-200 shadow-xl" radius="lg">
+            <CardHeader className="flex flex-col items-center gap-4 px-8 pt-10 pb-4">
               <Link href="/">
                 <Image
                   src="/logo-icon.svg"
@@ -58,14 +58,14 @@ export default function LoginPage() {
                 <h1 className="text-2xl font-bold text-gray-900">
                   {t('auth.loginTitle')}
                 </h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-2 text-sm text-gray-500">
                   შედით თქვენს ანგარიშზე
                 </p>
               </div>
             </CardHeader>
 
             <CardBody className="px-8 py-6">
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <Input
                   type="email"
                   label={t('auth.emailLabel')}
@@ -74,9 +74,13 @@ export default function LoginPage() {
                   onValueChange={setEmail}
                   startContent={<Mail className="h-4 w-4 text-gray-400" />}
                   classNames={{
-                    inputWrapper: 'border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011]',
+                    inputWrapper: 'h-14 border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011] rounded-xl',
+                    label: 'text-gray-600 font-medium',
+                    input: 'text-base',
                   }}
                   variant="bordered"
+                  radius="lg"
+                  size="lg"
                   isRequired
                 />
 
@@ -101,22 +105,28 @@ export default function LoginPage() {
                     </button>
                   }
                   classNames={{
-                    inputWrapper: 'border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011]',
+                    inputWrapper: 'h-14 border-gray-200 hover:border-[#FFB011] focus-within:!border-[#FFB011] rounded-xl',
+                    label: 'text-gray-600 font-medium',
+                    input: 'text-base',
                   }}
                   variant="bordered"
+                  radius="lg"
+                  size="lg"
                   isRequired
                 />
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between pt-1">
                   <Checkbox
                     isSelected={rememberMe}
                     onValueChange={setRememberMe}
-                    size="sm"
+                    size="md"
+                    radius="md"
                     classNames={{
-                      wrapper: 'after:bg-[#FFB011]',
+                      wrapper: 'after:bg-[#FFB011] rounded-md',
+                      label: 'text-sm text-gray-600',
                     }}
                   >
-                    <span className="text-sm text-gray-600">{t('auth.rememberMe')}</span>
+                    {t('auth.rememberMe')}
                   </Checkbox>
                   <Link
                     href="/auth/forgot-password"
@@ -128,8 +138,7 @@ export default function LoginPage() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00]"
-                  size="lg"
+                  className="w-full h-14 bg-[#FFB011] text-black font-semibold hover:bg-[#E09D00] text-base"
                   radius="lg"
                   isLoading={isLoading}
                 >
@@ -137,17 +146,17 @@ export default function LoginPage() {
                 </Button>
               </form>
 
-              <div className="relative my-6">
+              <div className="relative my-8">
                 <Divider />
-                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm text-gray-500">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-4 text-sm text-gray-500">
                   {t('auth.orContinueWith')}
                 </span>
               </div>
 
-              <div className="grid gap-3">
+              <div className="grid gap-4">
                 <Button
                   variant="bordered"
-                  className="w-full border-gray-200 font-medium"
+                  className="w-full h-12 border-gray-200 font-medium"
                   radius="lg"
                   startContent={
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
@@ -174,7 +183,7 @@ export default function LoginPage() {
                 </Button>
                 <Button
                   variant="bordered"
-                  className="w-full border-gray-200 font-medium"
+                  className="w-full h-12 border-gray-200 font-medium"
                   radius="lg"
                   startContent={
                     <svg className="h-5 w-5" fill="#1877F2" viewBox="0 0 24 24">
@@ -187,7 +196,7 @@ export default function LoginPage() {
               </div>
             </CardBody>
 
-            <CardFooter className="justify-center pb-8">
+            <CardFooter className="justify-center pb-10 pt-2">
               <p className="text-sm text-gray-600">
                 {t('auth.dontHaveAccount')}{' '}
                 <Link

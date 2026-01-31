@@ -2,7 +2,7 @@
 
 import { PackageX } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 
 interface EmptyStateProps {
   title?: string;
@@ -29,8 +29,9 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
       </p>
       {action && (
         <Button
-          onClick={action.onClick}
-          className="mt-4 bg-amber-500 hover:bg-amber-600"
+          onPress={action.onClick}
+          color="warning"
+          className="mt-4"
         >
           {action.label}
         </Button>

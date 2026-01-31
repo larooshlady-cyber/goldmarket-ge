@@ -1,19 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n';
-import { listings } from '@/lib/mock';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Card, CardBody, CardHeader, Button, Chip, Input, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Tabs, Tab } from '@heroui/react';
 import {
   Plus,
   Search,
@@ -21,201 +9,284 @@ import {
   Edit,
   Pause,
   Play,
-  CheckCircle,
-  Archive,
   Trash2,
-  Sparkles,
+  CheckCircle,
+  Eye,
 } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
 
 type ListingStatus = 'all' | 'published' | 'draft' | 'paused' | 'sold' | 'archived';
 
-export default function MyListingsPage() {
+const mockListings = [
+  {
+    id: 1,
+    title: 'ოქროს ბეჭედი 585',
+    category: 'ბეჭდები',
+    price: 1200,
+    status: 'published',
+    views: 234,
+    createdAt: '2024-01-15',
+    image: '/images/ring1.jpg',
+  },
+  {
+    id: 2,
+    title: 'ვერცხლის ჯაჭვი',
+    category: 'ჯაჭვები',
+    price: 350,
+    status: 'published',
+    views: 156,
+    createdAt: '2024-01-12',
+    image: '/images/chain1.jpg',
+  },
+  {
+    id: 3,
+    title: 'ბრილიანტის საყურე',
+    category: 'საყურეები',
+    price: 4500,
+    status: 'draft',
+    views: 0,
+    createdAt: '2024-01-10',
+    image: '/images/earring1.jpg',
+  },
+  {
+    id: 4,
+    title: 'ანტიკვარული მონეტა',
+    category: 'მონეტები',
+    price: 800,
+    status: 'paused',
+    views: 89,
+    createdAt: '2024-01-08',
+    image: '/images/coin1.jpg',
+  },
+  {
+    id: 5,
+    title: 'ოქროს სამაჯური',
+    category: 'სამაჯურები',
+    price: 2100,
+    status: 'sold',
+    views: 312,
+    createdAt: '2024-01-05',
+    image: '/images/bracelet1.jpg',
+  },
+];
+
+const statusColors: Record<string, 'success' | 'warning' | 'danger' | 'default' | 'primary' | 'secondary'> = {
+  published: 'success',
+  draft: 'default',
+  paused: 'warning',
+  sold: 'primary',
+  archived: 'secondary',
+};
+
+export default function ListingsPage() {
   const { t } = useLanguage();
+  const [activeTab, setActiveTab] = useState<ListingStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<ListingStatus>('all');
 
-  // Add mock status to listings
-  const listingsWithStatus = listings.map((listing, index) => ({
-    ...listing,
-    status: index % 5 === 0 ? 'draft' : index % 4 === 0 ? 'paused' : 'published',
-    createdAt: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString(),
-  }));
-
-  const filteredListings = listingsWithStatus.filter((listing) => {
-    const matchesSearch = listing.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || listing.status === statusFilter;
-    return matchesSearch && matchesStatus;
+  const filteredListings = mockListings.filter((listing) => {
+    if (activeTab !== 'all' && listing.status !== activeTab) return false;
+    if (searchQuery && !listing.title.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+    return true;
   });
 
-  const getStatusBadge = (status: string) => {
+  const getStatusLabel = (status: string) => {
     switch (status) {
       case 'published':
-        return <Badge className="bg-green-100 text-green-700">{t('listingStatus.published')}</Badge>;
+        return t('listings.statusPublished');
       case 'draft':
-        return <Badge variant="secondary">{t('listingStatus.draft')}</Badge>;
+        return t('listings.statusDraft');
       case 'paused':
-        return <Badge className="bg-yellow-100 text-yellow-700">{t('listingStatus.paused')}</Badge>;
+        return t('listings.statusPaused');
       case 'sold':
-        return <Badge className="bg-blue-100 text-blue-700">{t('listingStatus.sold')}</Badge>;
+        return t('listings.statusSold');
       case 'archived':
-        return <Badge variant="outline">{t('listingStatus.archived')}</Badge>;
+        return t('listings.statusArchived');
       default:
-        return null;
+        return status;
     }
   };
 
-  const statusTabs: { key: ListingStatus; label: string }[] = [
-    { key: 'all', label: t('common.all') },
-    { key: 'published', label: t('listingStatus.published') },
-    { key: 'draft', label: t('listingStatus.draft') },
-    { key: 'paused', label: t('listingStatus.paused') },
-    { key: 'sold', label: t('listingStatus.sold') },
-    { key: 'archived', label: t('listingStatus.archived') },
-  ];
+  const statusCounts = {
+    all: mockListings.length,
+    published: mockListings.filter((l) => l.status === 'published').length,
+    draft: mockListings.filter((l) => l.status === 'draft').length,
+    paused: mockListings.filter((l) => l.status === 'paused').length,
+    sold: mockListings.filter((l) => l.status === 'sold').length,
+    archived: mockListings.filter((l) => l.status === 'archived').length,
+  };
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-bold">{t('account.myListings')}</h1>
-        <Button asChild className="bg-amber-500 hover:bg-amber-600">
-          <Link href="/account/listings/new">
-            <Plus className="mr-2 h-4 w-4" />
-            {t('account.createListing')}
-          </Link>
+        <h1 className="text-2xl font-bold">{t('account.listings')}</h1>
+        <Button
+          as={Link}
+          href="/account/listings/new"
+          className="bg-amber-500 text-white hover:bg-amber-600"
+          startContent={<Plus className="h-4 w-4" />}
+        >
+          {t('listings.createNew')}
         </Button>
       </div>
 
       <Card>
-        <CardHeader>
-          <div className="flex flex-col gap-4">
-            {/* Status tabs */}
-            <div className="flex flex-wrap gap-2">
-              {statusTabs.map((tab) => (
-                <button
-                  key={tab.key}
-                  onClick={() => setStatusFilter(tab.key)}
-                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                    statusFilter === tab.key
-                      ? 'bg-amber-100 text-amber-700'
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Search */}
-            <div className="relative max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <Input
-                placeholder={t('common.search')}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9"
-              />
-            </div>
+        <CardHeader className="flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <Tabs 
+            selectedKey={activeTab} 
+            onSelectionChange={(key) => setActiveTab(key as ListingStatus)}
+            variant="underlined"
+            classNames={{
+              tabList: "gap-2",
+              cursor: "bg-amber-500",
+              tab: "px-3 py-2",
+            }}
+          >
+            <Tab key="all" title={`${t('common.all')} (${statusCounts.all})`} />
+            <Tab key="published" title={`${t('listings.statusPublished')} (${statusCounts.published})`} />
+            <Tab key="draft" title={`${t('listings.statusDraft')} (${statusCounts.draft})`} />
+            <Tab key="paused" title={`${t('listings.statusPaused')} (${statusCounts.paused})`} />
+            <Tab key="sold" title={`${t('listings.statusSold')} (${statusCounts.sold})`} />
+          </Tabs>
+          
+          <div className="w-full sm:w-64">
+            <Input
+              placeholder={t('common.search')}
+              value={searchQuery}
+              onValueChange={setSearchQuery}
+              startContent={<Search className="h-4 w-4 text-gray-400" />}
+              variant="bordered"
+              size="sm"
+            />
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b text-left text-sm text-gray-500">
-                  <th className="pb-3 pr-4">{t('common.images')}</th>
-                  <th className="pb-3 pr-4">{t('common.title')}</th>
-                  <th className="hidden pb-3 pr-4 md:table-cell">{t('common.category')}</th>
-                  <th className="pb-3 pr-4">{t('common.price')}</th>
-                  <th className="pb-3 pr-4">{t('common.status')}</th>
-                  <th className="hidden pb-3 pr-4 lg:table-cell">{t('common.date')}</th>
-                  <th className="pb-3">{t('common.actions')}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredListings.length === 0 ? (
-                  <tr>
-                    <td colSpan={7} className="py-8 text-center text-gray-500">
-                      {t('empty.noListings')}
-                    </td>
+        
+        <CardBody>
+          {filteredListings.length === 0 ? (
+            <div className="py-12 text-center">
+              <p className="text-gray-500">{t('listings.noListings')}</p>
+              <Button
+                as={Link}
+                href="/account/listings/new"
+                className="mt-4 bg-amber-500 text-white hover:bg-amber-600"
+                size="sm"
+              >
+                {t('listings.createFirst')}
+              </Button>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[800px]">
+                <thead>
+                  <tr className="border-b text-left text-sm text-gray-500">
+                    <th className="pb-3 pr-4">{t('listings.tableImage')}</th>
+                    <th className="pb-3 pr-4">{t('listings.tableTitle')}</th>
+                    <th className="pb-3 pr-4">{t('listings.tableCategory')}</th>
+                    <th className="pb-3 pr-4">{t('listings.tablePrice')}</th>
+                    <th className="pb-3 pr-4">{t('listings.tableStatus')}</th>
+                    <th className="pb-3 pr-4">{t('listings.tableViews')}</th>
+                    <th className="pb-3 pr-4">{t('listings.tableDate')}</th>
+                    <th className="pb-3">{t('common.actions')}</th>
                   </tr>
-                ) : (
-                  filteredListings.map((listing) => (
+                </thead>
+                <tbody>
+                  {filteredListings.map((listing) => (
                     <tr key={listing.id} className="border-b last:border-0">
                       <td className="py-3 pr-4">
-                        <img
-                          src={listing.images[0]}
-                          alt={listing.title}
-                          className="h-12 w-12 rounded-lg object-cover"
-                        />
+                        <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-gray-100">
+                          <Image
+                            src={listing.image}
+                            alt={listing.title}
+                            fill
+                            className="object-cover"
+                          />
+                        </div>
                       </td>
                       <td className="py-3 pr-4">
-                        <Link
-                          href={`/listing/${listing.slug}`}
+                        <Link 
+                          href={`/listing/${listing.id}`}
                           className="font-medium hover:text-amber-600"
                         >
                           {listing.title}
                         </Link>
                       </td>
-                      <td className="hidden py-3 pr-4 text-sm text-gray-600 md:table-cell">
-                        {listing.category?.nameKey || listing.categoryId}
+                      <td className="py-3 pr-4 text-sm text-gray-500">
+                        {listing.category}
                       </td>
                       <td className="py-3 pr-4 font-medium">
                         {listing.price.toLocaleString()} {t('common.currency')}
                       </td>
-                      <td className="py-3 pr-4">{getStatusBadge(listing.status)}</td>
-                      <td className="hidden py-3 pr-4 text-sm text-gray-500 lg:table-cell">
+                      <td className="py-3 pr-4">
+                        <Chip 
+                          color={statusColors[listing.status] || 'default'} 
+                          variant="flat" 
+                          size="sm"
+                        >
+                          {getStatusLabel(listing.status)}
+                        </Chip>
+                      </td>
+                      <td className="py-3 pr-4 text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Eye className="h-4 w-4" />
+                          {listing.views}
+                        </div>
+                      </td>
+                      <td className="py-3 pr-4 text-sm text-gray-500">
                         {new Date(listing.createdAt).toLocaleDateString()}
                       </td>
                       <td className="py-3">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon">
+                        <Dropdown>
+                          <DropdownTrigger>
+                            <Button isIconOnly variant="light" size="sm">
                               <MoreVertical className="h-4 w-4" />
                             </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>
-                              <Edit className="mr-2 h-4 w-4" />
-                              {t('listingActions.edit')}
-                            </DropdownMenuItem>
-                            {listing.status === 'published' && (
-                              <DropdownMenuItem>
-                                <Pause className="mr-2 h-4 w-4" />
-                                {t('listingActions.pause')}
-                              </DropdownMenuItem>
-                            )}
-                            {listing.status === 'paused' && (
-                              <DropdownMenuItem>
-                                <Play className="mr-2 h-4 w-4" />
-                                {t('listingActions.resume')}
-                              </DropdownMenuItem>
-                            )}
-                            <DropdownMenuItem>
-                              <CheckCircle className="mr-2 h-4 w-4" />
-                              {t('listingActions.markSold')}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Sparkles className="mr-2 h-4 w-4" />
-                              {t('listingActions.boost')}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                              <Archive className="mr-2 h-4 w-4" />
-                              {t('listingActions.archive')}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600">
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              {t('listingActions.delete')}
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                          </DropdownTrigger>
+                          <DropdownMenu aria-label="Actions">
+                            <DropdownItem
+                              key="edit"
+                              startContent={<Edit className="h-4 w-4" />}
+                            >
+                              {t('common.edit')}
+                            </DropdownItem>
+                            <DropdownItem
+                              key="toggle-status"
+                              startContent={
+                                listing.status === 'published' ? (
+                                  <Pause className="h-4 w-4" />
+                                ) : (
+                                  <Play className="h-4 w-4" />
+                                )
+                              }
+                              className={listing.status !== 'published' && listing.status !== 'paused' ? 'hidden' : ''}
+                            >
+                              {listing.status === 'published' ? t('listings.pause') : t('listings.activate')}
+                            </DropdownItem>
+                            <DropdownItem
+                              key="sold"
+                              startContent={<CheckCircle className="h-4 w-4" />}
+                              className={listing.status === 'sold' ? 'hidden' : ''}
+                            >
+                              {t('listings.markSold')}
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger"
+                              color="danger"
+                              startContent={<Trash2 className="h-4 w-4" />}
+                            >
+                              {t('common.delete')}
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
                       </td>
                     </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </CardBody>
       </Card>
     </div>
   );

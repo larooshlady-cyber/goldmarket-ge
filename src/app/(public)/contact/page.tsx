@@ -3,11 +3,7 @@
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 import { Container, Breadcrumbs } from '@/components/layout';
-import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
+import { Card, CardBody, Input, Textarea, Button } from '@heroui/react';
 
 export default function ContactPage() {
   const { t } = useLanguage();
@@ -61,7 +57,7 @@ export default function ContactPage() {
             <div className="space-y-4">
               {contactInfo.map((item, index) => (
                 <Card key={index}>
-                  <CardContent className="flex items-center gap-4 p-4">
+                  <CardBody className="flex items-center gap-4 p-4">
                     <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-amber-100">
                       <item.icon className="h-5 w-5 text-amber-600" />
                     </div>
@@ -78,48 +74,46 @@ export default function ContactPage() {
                         <p className="font-medium text-gray-900">{item.value}</p>
                       )}
                     </div>
-                  </CardContent>
+                  </CardBody>
                 </Card>
               ))}
             </div>
 
             {/* Contact Form */}
             <Card>
-              <CardContent className="p-6">
+              <CardBody className="p-6">
                 <h2 className="mb-4 text-lg font-semibold text-gray-900">
                   მოგვწერეთ
                 </h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">{t('auth.nameLabel')}</Label>
-                    <Input id="name" placeholder={t('auth.namePlaceholder')} required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">{t('auth.emailLabel')}</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={t('auth.emailPlaceholder')}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="message">შეტყობინება</Label>
-                    <Textarea
-                      id="message"
-                      placeholder="დაწერეთ თქვენი შეტყობინება..."
-                      rows={5}
-                      required
-                    />
-                  </div>
+                  <Input
+                    label={t('auth.nameLabel')}
+                    placeholder={t('auth.namePlaceholder')}
+                    variant="bordered"
+                    isRequired
+                  />
+                  <Input
+                    label={t('auth.emailLabel')}
+                    type="email"
+                    placeholder={t('auth.emailPlaceholder')}
+                    variant="bordered"
+                    isRequired
+                  />
+                  <Textarea
+                    label="შეტყობინება"
+                    placeholder="დაწერეთ თქვენი შეტყობინება..."
+                    minRows={5}
+                    variant="bordered"
+                    isRequired
+                  />
                   <Button
                     type="submit"
-                    className="w-full bg-amber-500 hover:bg-amber-600"
+                    className="w-full bg-amber-500 text-white hover:bg-amber-600"
                   >
                     გაგზავნა
                   </Button>
                 </form>
-              </CardContent>
+              </CardBody>
             </Card>
           </div>
         </div>
